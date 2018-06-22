@@ -14,6 +14,11 @@ public class Quiz1 {
 		int num2 = s.nextInt();
 
 		System.out.println(num1 + " + " + num2 + " = " + (num1 + num2));
+		if(num1 > num2) {
+			System.out.println(num1 - num2);
+		} else {
+			System.out.println(num1 + num2);
+		}
 		System.out.println(num1 + " - " + num2 + " = " + (num1 - num2));
 		System.out.println(num1 + " * " + num2 + " = " + (num1 * num2));
 		System.out.println(num1 + " / " + num2 + " = " + (num1 / num2));
