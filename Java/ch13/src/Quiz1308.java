@@ -18,6 +18,7 @@ public class Quiz1308 {
 			}
 		}
 		//배열에 저장된 값을 출력
+		System.out.println("구분" + "   이순신" + "   강감찬" + "   을지문덕" + "  권율 ");
 		for(int i =0; i< arr.length; i++) {
 			for(int j=0; j< arr[i].length; j++) {
 				System.out.print(arr[i][j] + "\t");
