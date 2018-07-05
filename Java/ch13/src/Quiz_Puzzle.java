@@ -76,9 +76,11 @@ public class Quiz_Puzzle {
 			
 				
 		while(true) {		
-		System.out.println(arr1[0][0] + " " + arr1[0][1] + " " + arr1[0][2]);
-		System.out.println(arr1[1][0] + " " + arr1[1][1] + " " + arr1[1][2]);
-		System.out.println(arr1[2][0] + " " + arr1[2][1] + " " + arr1[2][2]);
+		System.out.println(arr1[0][0] + " | " + arr1[0][1] + " | " + arr1[0][2]);
+		System.out.println("---------");
+		System.out.println(arr1[1][0] + " | " + arr1[1][1] + " | " + arr1[1][2]);
+		System.out.println("---------");
+		System.out.println(arr1[2][0] + " | " + arr1[2][1] + " | " + arr1[2][2]);
 		System.out.print("이동할 좌표");
 		int i = s.nextInt();
 		
