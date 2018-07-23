@@ -9,17 +9,17 @@ public class javaChatClient {
 		Scanner s =new Scanner(System.in);
 		String s_name = s.nextLine();
 
-		String str1 = "/to 가 hello";
-		String str2 = "안녕하세요";
-		// 1."/to 대상"에 다음변수 입력, 초기화 토글
-		String sToReader = "/to aaaa";
-		//3. 고정 대상인 상태에서 임시 대상에게 귓속말
-		if(str1.indexOf("/to") >= 0) {
-			System.out.println(str2);
-		}else {
-		//2.무조건 붙여서 보내기
-			System.out.println(sToReader + str2);
-		}
+//		String str1 = "/to 가 hello";
+//		String str2 = "안녕하세요";
+//		// 1."/to 대상"에 다음변수 입력, 초기화 토글
+//		String sToReader = "/to aaaa";
+//		//3. 고정 대상인 상태에서 임시 대상에게 귓속말
+//		if(str1.indexOf("/to") >= 0) {
+//			System.out.println(str2);
+//		}else {
+//		//2.무조건 붙여서 보내기
+//			System.out.println(sToReader + str2);
+//		}
 		try {
 			String ServerIP = "localhost";
 			if(args.length > 0)
