@@ -20,12 +20,12 @@ public class A1_Main {
 			Statement stmt = con.createStatement();
 			
 			StringBuffer sb = new StringBuffer();
-			sb.append("select * from employee");
+			sb.append("select * from JAVAPROJECT");
 			
 			ResultSet rs = stmt.executeQuery(sb.toString());
 			while(rs.next()) {
-				System.out.print("eno : " + rs.getInt(1) + ", ");
-				System.out.println("ename : " + rs.getString("ename"));
+//				System.out.print("eno : " + rs.getInt(1) + ", ");
+				System.out.println("name : " + rs.getString("name"));
 			}
 			
 			rs.close();
