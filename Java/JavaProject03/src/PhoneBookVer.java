@@ -390,33 +390,28 @@ class PhoneBookManager
 					"tiger");
 			Statement stmt = con.createStatement();
 			
-			System.out.print("시군구를 적으세요 :");
+			System.out.print("점수를 줄 가게이름 :");
 			String name = MenuViewer.keyboard.nextLine();
+			System.out.print("당신의 점수가 제작에 큰 도움이 됩니다(1~10점) :");
+			String jumgsu = MenuViewer.keyboard.nextLine();
 
 			StringBuffer sb = new StringBuffer();
-			sb.append("select * from JAVAPROJECT where GIGUNGU like '%"+name+"%'");
+			sb.append("update javaproject2 set jumgsu = (jumgsu+'"+jumgsu+"')/2 where name = '"+name+"'");
 			
 			ResultSet rs = stmt.executeQuery(sb.toString());
-			while(rs.next()) {
-				System.out.print("가게 이름 : " + rs.getString("name")+ '\t');
-				System.out.print("음식 종류 : " + rs.getString("food3")+ '\t');
-				System.out.print("지역 : " + rs.getString("sido")+ '\t');
-				System.out.print("시군구 : " + rs.getString("gigungu")+ '\t');
-				System.out.print("설명 : " + rs.getString("data")+ '\t');
-				System.out.println("평점 : " + rs.getString("jumgsu"));
-			}
+
 			
 			rs.close();
 			stmt.close();
 			con.close();
 		}catch(SQLException sqle) {
-			System.out.println("Connection Error");
+			System.out.println("점수범위가 아닙니다.");
 			sqle.printStackTrace();
 		}	
 		return null;
 	}
 	
-	public void Data() throws MenuChoiceException
+	public void Data() throws MenuChoiceException	//1번 메뉴
 	{
 		System.out.println("데이터 검색을 시작합니다...");
 		System.out.println("검색하실 종류를 선택하세요...");
