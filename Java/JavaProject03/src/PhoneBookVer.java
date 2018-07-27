@@ -136,43 +136,8 @@ class PhoneBookManager
 		readFromFile();
 	}
 	
-	private PhoneInfo readFriendInfo() //1번
-	{
-		System.out.print("이름 : ");
-		String name = MenuViewer.keyboard.nextLine();
-		System.out.print("전화번호 : ");
-		String phone = MenuViewer.keyboard.nextLine();
-		return new PhoneInfo(name, phone);
-	}
-	
-	private PhoneInfo readUnivFriendInfo()	//2번
-	//////////////////////////////////////////////////
-	{
-		System.out.print("이름 : ");
-		String name = MenuViewer.keyboard.nextLine();
-		System.out.print("전화번호 : ");
-		String phone = MenuViewer.keyboard.nextLine();
-		System.out.print("전공 : ");
-		String major = MenuViewer.keyboard.nextLine();
-		System.out.print("학년 : ");
-		String year = MenuViewer.keyboard.nextLine();
-		MenuViewer.keyboard.nextLine();
-		return new PhoneUnivInfo(name, phone, major, year);
-	}
-	
-	private PhoneInfo readCompanyFriendInfo()	//3번
-	{
-		System.out.print("이름 : ");
-		String name = MenuViewer.keyboard.nextLine();
-		System.out.print("전화번호 : ");
-		String phone = MenuViewer.keyboard.nextLine();
-		System.out.print("회사 : ");
-		String company = MenuViewer.keyboard.nextLine();
-		return new PhoneCompanyInfo(name, phone, company);
-	}
-	
 	////////////////////////////////////////////////////
-	private PhoneInfo Addname()	//2-1번 데이터 추가 완료
+	private PhoneInfo Addname()	//2-1번 데이터 추가 
 	{
 		try {
 			Connection con = DriverManager.getConnection(
@@ -183,7 +148,7 @@ class PhoneBookManager
 			
 			System.out.print("가게이름 :");
 			String name = MenuViewer.keyboard.nextLine();
-			System.out.print("음식 종류 :");
+			System.out.print("음식종류 :");
 			String food3 = MenuViewer.keyboard.nextLine();
 			System.out.print("지역 :");
 			String sido = MenuViewer.keyboard.nextLine();
@@ -194,7 +159,7 @@ class PhoneBookManager
 
 			
 			StringBuffer sb = new StringBuffer();
-			sb.append("insert into JAVAPROJECT values('"+name+"', '"+food3+"', '"+sido+"', '"+gigungu+"', '"+data+"')");
+			sb.append("insert into JAVAPROJECT values('"+name+"', '"+food3+"', '"+sido+"', '"+gigungu+"', '"+data+"', '')");
 			
 			ResultSet rs = stmt.executeQuery(sb.toString());
 
@@ -207,25 +172,63 @@ class PhoneBookManager
 		}
 		return null;	
 	}
-	
-	private PhoneInfo Delname()	//2-2번 데이터 삭제 제작중
+
+	private PhoneInfo Sujungname()	//2-2번 데이터 수정
 	{
 		try {
 			Connection con = DriverManager.getConnection(
 					"jdbc:oracle:thin:@localhost:1521:xe",
 					"scott",
 					"tiger");
+
+			System.out.print("수정하고 싶은 가게이름 :");
+			String name = MenuViewer.keyboard.nextLine();
+			System.out.print("수정할 가게이름 :");
+			String select = MenuViewer.keyboard.nextLine();
+			System.out.print("수정할 음식종류 :");
+			String select2 = MenuViewer.keyboard.nextLine();
+			System.out.print("수정할 지역 :");
+			String select3 = MenuViewer.keyboard.nextLine();
+			System.out.print("수정할 시군구 :");
+			String select4 = MenuViewer.keyboard.nextLine();
+			System.out.print("수정할 내용 :");
+			String select5 = MenuViewer.keyboard.nextLine();	
+
 			Statement stmt = con.createStatement();
-			
+			StringBuffer sb = new StringBuffer();
+			sb.append("update javaproject set name = '"+select+"', food3 = '"+select2+"', sido = '"+select3+"', gigungu = '"+select4+"', data = '"+select5+"' where name = '"+name+"'");
+			con.commit();
+			stmt.executeUpdate(sb.toString());
+						
+			stmt.close();
+			con.close();
+		}catch(SQLException sqle) {
+			System.out.println("검색값이 존재하지 않습니다.");
+			sqle.printStackTrace();
+		}
+		return null;	
+	}
+	
+	private PhoneInfo Delname()	//2-3번 데이터 삭제 
+	{
+		try {
+			Connection con = DriverManager.getConnection(
+					"jdbc:oracle:thin:@localhost:1521:xe",
+					"scott",
+					"tiger");
+
 			System.out.print("가게이름 :");
 			String name = MenuViewer.keyboard.nextLine();
 			
-			StringBuffer sb = new StringBuffer();
-			sb.append("delete JAVAPROJECT2 where name like '%"+name+"%'");
-
-			ResultSet rs = stmt.executeQuery(sb.toString());
+//			System.out.println("[" + name + "]");
+//			System.out.println("''''''''");
+//			String sql = "delete from JAVAPROJECT2 where name = '"+name+"'";
 			
-			rs.close();
+			Statement stmt = con.createStatement();
+			StringBuffer sb = new StringBuffer();
+			sb.append("delete from JAVAPROJECT where name = '"+name+"'");	
+			stmt.executeUpdate(sb.toString());
+			
 			stmt.close();
 			con.close();
 		}catch(SQLException sqle) {
@@ -238,7 +241,7 @@ class PhoneBookManager
 	public void inputData() throws MenuChoiceException	//2번 메뉴
 	{
 		System.out.println("데이터 입력을 시작합니다...");	
-		System.out.println("1.추가, 2.수정(제작해야함) , 3.삭제 ");
+		System.out.println("1.추가, 2.수정, 3.삭제 ");
 		System.out.print("선택>> ");
 		int choice = MenuViewer.keyboard.nextInt();
 		MenuViewer.keyboard.nextLine();
@@ -250,14 +253,12 @@ class PhoneBookManager
 		switch(choice)
 		{
 		case INPUT_SELECT.NORMAL :
-//			info=readFriendInfo();
 			info=Addname();
 			break;
 		case INPUT_SELECT.UNIV :
-			info=readUnivFriendInfo();
+			info=Sujungname();
 			break;
 		case INPUT_SELECT.COMPANY :
-//			info=readCompanyFriendInfo();
 			info=Delname();
 			break;
 		}
@@ -269,7 +270,7 @@ class PhoneBookManager
 			System.out.println("이미 저장된 데이터 입니다. \n");
 	}
 //////////////////////////////////////////// ㅜㅜㅜㅜㅜㅜ1.데이터 검색	
-	private PhoneInfo Dataname()
+	private PhoneInfo Dataname()	//1-1번
 	{
 		try {
 			Connection con = DriverManager.getConnection(
@@ -291,7 +292,8 @@ class PhoneBookManager
 				System.out.print("음식 종류 : " + rs.getString("food3")+ '\t');
 				System.out.print("지역 : " + rs.getString("sido")+ '\t');
 				System.out.print("시군구 : " + rs.getString("gigungu")+ '\t');
-				System.out.println("설명 : " + rs.getString("data"));
+				System.out.print("설명 : " + rs.getString("data")+ '\t');
+				System.out.println("평점 : " + rs.getString("jumgsu"));				
 			}
 			
 			rs.close();
@@ -304,7 +306,7 @@ class PhoneBookManager
 		return null;	
 	}
 	
-	private PhoneInfo Datafood()
+	private PhoneInfo Datafood()	//1-2번
 	{
 		try {
 			Connection con = DriverManager.getConnection(
@@ -327,7 +329,8 @@ class PhoneBookManager
 				System.out.print("음식 종류 : " + rs.getString("food3")+ '\t');
 				System.out.print("지역 : " + rs.getString("sido")+ '\t');
 				System.out.print("시군구 : " + rs.getString("gigungu")+ '\t');
-				System.out.println("설명 : " + rs.getString("data"));
+				System.out.print("설명 : " + rs.getString("data")+ '\t');
+				System.out.println("평점 : " + rs.getString("jumgsu"));
 			}
 			
 			rs.close();
@@ -340,7 +343,7 @@ class PhoneBookManager
 		return null;
 	}
 	
-	private PhoneInfo Datasido()
+	private PhoneInfo Datasido()	//1-3번
 	{
 		try {
 			Connection con = DriverManager.getConnection(
@@ -364,7 +367,8 @@ class PhoneBookManager
 				System.out.print("음식 종류 : " + rs.getString("food3")+ '\t');
 				System.out.print("지역 : " + rs.getString("sido")+ '\t');
 				System.out.print("시군구 : " + rs.getString("gigungu")+ '\t');
-				System.out.println("설명 : " + rs.getString("data"));
+				System.out.print("설명 : " + rs.getString("data")+ '\t');
+				System.out.println("평점 : " + rs.getString("jumgsu"));
 			}
 			
 			rs.close();
@@ -377,7 +381,7 @@ class PhoneBookManager
 		return null;
 	}
 	
-	private PhoneInfo Datagigungu()	//굳이 필요없을거 같은데 혹시몰라서 남겨놈
+	private PhoneInfo Datagigungu()	//1-4번
 	{
 		try {
 			Connection con = DriverManager.getConnection(
@@ -398,7 +402,8 @@ class PhoneBookManager
 				System.out.print("음식 종류 : " + rs.getString("food3")+ '\t');
 				System.out.print("지역 : " + rs.getString("sido")+ '\t');
 				System.out.print("시군구 : " + rs.getString("gigungu")+ '\t');
-				System.out.println("설명 : " + rs.getString("data"));
+				System.out.print("설명 : " + rs.getString("data")+ '\t');
+				System.out.println("평점 : " + rs.getString("jumgsu"));
 			}
 			
 			rs.close();
@@ -415,7 +420,7 @@ class PhoneBookManager
 	{
 		System.out.println("데이터 검색을 시작합니다...");
 		System.out.println("검색하실 종류를 선택하세요...");
-		System.out.println("1.가게이름  2.음식 종류  3.지역  4.시군구 ");
+		System.out.println("1.가게이름  2.음식 종류  3.지역  4.평점주기 ");
 		System.out.print("선택>> ");
 		int choice = MenuViewer.keyboard.nextInt();
 		MenuViewer.keyboard.nextLine();
