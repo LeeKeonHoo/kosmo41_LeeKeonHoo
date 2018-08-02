@@ -1,25 +1,26 @@
-//전화번호 관리 프로그램 구현 프로젝트
+//전국음식점 프로그램 구현 프로젝트
 //version 0.9
+//오라클 사용 프로그램 JAVAPROJECT, JAVAPROJECT2
 
 import java.util.*;
 import java.io.*;
 import java.sql.*;
-import java.awt.*;
-import javax.swing.*;
-import java.awt.event.*;
-import javax.swing.border.*;
 
 interface INIT_MENU	//초기 화면
 {
-	int DATA = 1, INPUT =2, EXIT =3;
-}
-interface INPUT_SELECT	//2.데이터 입력
-{
-	int NORMAL =1, UNIV =2, COMPANY =3;
+	int DATA = 1, INPUT =2, STAR =3, EXIT=4;
 }
 interface INPUT_SERACH	//1.데이터 검색
 {
 	int NAME =1, FOOD =2, SIDO =3, JUMGSU =4, RANK = 5;
+}
+interface INPUT_SELECT	//2.데이터 입력
+{
+	int CHUGA =1, SUJUNG =2, SAKJAE =3;
+}
+interface INPUT_STAR	//3.즐겨찾기
+{
+	int LIST =1, ADD = 2,DEL = 3;
 }
 class MenuChoiceException extends Exception	//잘못된 선택을 한 경우
 {
@@ -30,46 +31,17 @@ class MenuChoiceException extends Exception	//잘못된 선택을 한 경우
 		super("잘못된 선택이 이뤄졌습니다.");
 		wrongChoice = choice;
 	}
+	
 	public void showWrongChoice()
 	{
 		System.out.println(wrongChoice + "에 해당하는 선택은 존재하지 않습니다.");
 	}
 }
 ////////////////////////////////////////////////////////////
-class MatZiplist implements Serializable{
-	String name;
-	String phoneNumber;
-	
-	public MatZiplist(String name, String num)
-	{
-		this.name = name;
-		phoneNumber = num;
-	}
-	public void showPhoneInfo()
-	{
-		System.out.println("name : " + name);
-		System.out.println("phone : " + phoneNumber);
-	}
-	public String toString()
-	{
-		return "name : " + name + '\n' + "phone : " + phoneNumber + '\n';
-	}
-	public int hashCode()
-	{
-		return name.hashCode();
-	}
-	public boolean equals(Object obj)
-	{
-		MatZiplist cmp = (MatZiplist)obj;
-		if(name.compareTo(cmp.name)==0)
-			return true;
-		else
-			return false;
-	}
-}
+class MatZiplist implements Serializable{}
 
 
-class MatZipManager
+class MatZipManager	//메인코드
 {
 	HashSet<MatZiplist> infoStorage = new HashSet<MatZiplist>();
 	
@@ -82,7 +54,8 @@ class MatZipManager
 		return inst;
 	}
 	
-	////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////
+	
 	private MatZiplist Addname()	//2-1번 데이터 추가 
 	{
 		try {
@@ -205,18 +178,18 @@ class MatZipManager
 		MenuViewer.keyboard.nextLine();
 		MatZiplist info = null;
 		
-		if(choice<INPUT_SELECT.NORMAL || choice>INPUT_SELECT.COMPANY)
+		if(choice<INPUT_SELECT.CHUGA || choice>INPUT_SELECT.SAKJAE)
 			throw new MenuChoiceException(choice);
 		
 		switch(choice)
 		{
-		case INPUT_SELECT.NORMAL :
+		case INPUT_SELECT.CHUGA :
 			info=Addname();
 			break;
-		case INPUT_SELECT.UNIV :
+		case INPUT_SELECT.SUJUNG :
 			info=Sujungname();
 			break;
-		case INPUT_SELECT.COMPANY :
+		case INPUT_SELECT.SAKJAE :
 			info=Delname();
 			break;
 		}
@@ -227,7 +200,8 @@ class MatZipManager
 //		else
 //			System.out.println("잘못된 데이터 입니다. \n");
 	}
-//////////////////////////////////////////// ㅜㅜㅜㅜㅜㅜ1.데이터 검색	
+
+	////////////////////////////////////////////////////////	
 	
 	private MatZiplist Dataname()	//1-1번 가게이름
 	{
@@ -334,7 +308,6 @@ class MatZipManager
 		return null;
 	}
 	
-
 	private MatZiplist Datasido()	//1-3번 지역
 	{
 		try {
@@ -389,7 +362,6 @@ class MatZipManager
 		return null;
 	}
 	
-
 	private MatZiplist Datajumgsu() //1-4번 평점 주기
 	{
 		try {
@@ -431,7 +403,6 @@ class MatZipManager
 		return null;
 	}
 	
-
 	private MatZiplist Datarank() 	//1-5번 평점 랭킹
 	{
 		try {
@@ -457,8 +428,8 @@ class MatZipManager
 				System.out.print("평점 인원 : " + rs.getString("avgjumg")+ '\n');
 				count++;
 			}
-				System.out.println("총 "+count+" 지점 입니다. \n");
-				System.out.println("표기조건 : 최소 1명이상 평점");
+				System.out.println("총 "+count+" 지점 입니다.");
+				System.out.println("표기조건 : 최소 1명이상 평점 \n");
 			}
 			rs.close();
 			stmt.close();
@@ -503,142 +474,174 @@ class MatZipManager
 		}
 		}
 	
-///////////////////////////////////////////	ㅗㅗㅗㅗㅗ1.데이터 검색
+	/////////////////////////////////////////////////////
+	
+	private MatZiplist Starlist() 	//3-1번 즐겨찾기 리스트
+	{
+		try {
+			Connection con = DriverManager.getConnection(
+					"jdbc:oracle:thin:@localhost:1521:xe",
+					"scott",
+					"tiger");
+			Statement stmt = con.createStatement();
+		
+			StringBuffer sb = new StringBuffer();
+			sb.append("select * from javaproject2");
+			ResultSet rs = stmt.executeQuery(sb.toString());
+			if(rs.next()) {
+				int count = 0;
+				System.out.print("가게 이름 : " + rs.getString("name")+ '\t');
+				System.out.print("음식 종류 : " + rs.getString("food3")+ '\t');
+				System.out.print("지역 : " + rs.getString("sido")+ '\t');
+				System.out.print("시군구 : " + rs.getString("gigungu")+ '\t');
+				System.out.print("평점 : " + rs.getString("jumgsu")+ '\t');		
+				System.out.print("평점 인원 : " + rs.getString("avgjumg")+ '\t');
+				System.out.println("설명 : " + rs.getString("data"));
+				count++;
+				while(rs.next()) 
+			{
+					System.out.print("가게 이름 : " + rs.getString("name")+ '\t');
+					System.out.print("음식 종류 : " + rs.getString("food3")+ '\t');
+					System.out.print("지역 : " + rs.getString("sido")+ '\t');
+					System.out.print("시군구 : " + rs.getString("gigungu")+ '\t');
+					System.out.print("평점 : " + rs.getString("jumgsu")+ '\t');		
+					System.out.print("평점 인원 : " + rs.getString("avgjumg")+ '\t');
+					System.out.println("설명 : " + rs.getString("data"));
+				count++;
+			}
+				System.out.println("총 "+count+" 지점 입니다. \n");
+			}
+			rs.close();
+			stmt.close();
+			con.close();
+		}catch(SQLException sqle) {
+			System.out.println("즐겨찾기가 잘못댔습니다.");
+		}	
+		return null;
+	}
 
+	private MatZiplist Staradd()	//3-2번 즐겨찾기 추가 
+	{
+		try {
+			Connection con = DriverManager.getConnection(
+					"jdbc:oracle:thin:@localhost:1521:xe",
+					"scott",
+					"tiger");
+			Statement stmt = con.createStatement();
+			
+			System.out.print("가게이름 :");
+			String name = MenuViewer.keyboard.nextLine();
+			
+			StringBuffer sb = new StringBuffer();
+			sb.append("insert into javaproject2 select * from javaproject where name = '"+name+"'");		
+			ResultSet rs = stmt.executeQuery(sb.toString());
+			
+			int rss = stmt.getUpdateCount();
+			if(rss > 0) {
+				System.out.println("즐겨찾기가 추가대었습니다. \n");
+			}else {
+				throw new SQLException();
+			}
+
+			rs.close();
+			stmt.close();
+			con.close();
+		}catch(SQLException sqle) {
+			System.out.println("검색값이 존재하지 않습니다.");
+		}
+		return null;	
+	}
+	
+	private MatZiplist Stardel()	//3-3번 즐겨찾기 삭제 
+	{
+		try {
+			Connection con = DriverManager.getConnection(
+					"jdbc:oracle:thin:@localhost:1521:xe",
+					"scott",
+					"tiger");
+
+			System.out.print("가게이름 :");
+			String name = MenuViewer.keyboard.nextLine();
+		
+			Statement stmt = con.createStatement();
+			StringBuffer sb = new StringBuffer();
+			sb.append("delete from JAVAPROJECT2 where name = '"+name+"'");	
+			stmt.executeUpdate(sb.toString());
+			
+			int rs = stmt.getUpdateCount();
+			if(rs > 0) {
+				System.out.println("성공적으로 삭제를 완료하였습니다.  \n");
+			}else {
+				throw new SQLException();
+			}
+			
+			stmt.close();
+			con.close();
+		}catch(SQLException sqle) {
+			System.out.println("검색값이 존재하지 않습니다.");
+		}
+		return null;	
+	}	
+	
+	public void Star() throws MenuChoiceException	//3번 메뉴
+	{
+		System.out.println("즐겨찾기를 시작합니다...");
+		System.out.println("검색하실 종류를 선택하세요...");
+		System.out.println("1.즐겨찾기 리스트  2.즐겨찾기 추가 3.즐겨찾기 삭제");
+		System.out.print("선택>> ");
+		int choice = MenuViewer.keyboard.nextInt();
+		MenuViewer.keyboard.nextLine();
+		MatZiplist info = null;
+
+		if(choice<INPUT_STAR.LIST || choice>INPUT_STAR.DEL)
+			throw new MenuChoiceException(choice);
+	
+		switch(choice)
+		{
+		case INPUT_STAR.LIST :
+			info=Starlist();
+			break;
+		case INPUT_STAR.ADD :
+			info=Staradd();
+			break;			
+		case INPUT_STAR.DEL :
+			info=Stardel();
+			break;
+		}
+		}
 }
 
 class MenuViewer
 {
 	public static Scanner keyboard = new Scanner(System.in);
 	
-	public static void showMenu()
+	public static void showMenu()	//처음 메뉴 선택
 	{
 		System.out.println("관리자.ver");
 		System.out.println("맛집리스트에 오신걸 환영합니다.");
 		System.out.println("1. 데이터 검색");
 		System.out.println("2. 데이터 입력");
-		System.out.println("3. 프로그램 종료");
+		System.out.println("3. 즐겨찾기");
+		System.out.println("4. 프로그램 종료");
 		System.out.print("선택 >> ");				
 	}
 }
 
-//class SearchEventHandler implements ActionListener	//gui 서칭 도구
-//{
-////	JTextField searchField;
-////	JTextArea textArea;
-//	
-//	public SearchEventHandler(JTextField field, JTextArea area)
-//	{
-////		searchField = field;
-////		textArea = area;
-//	}
-//	public void actionPerformed(ActionEvent e)
-//	{
-////		String name = searchField.getText();
-////		PhoneBookManager manager = PhoneBookManager.createManagerInst();
-////		String srchResult = manager.guiname(name);
-////		if(srchResult != null)
-////		{
-////			textArea.append("해당하는 데이터가 존재하지 않습니다. \n");
-////		}
-////		else
-////		{
-////			textArea.append("찾으시는 정보를 알려드립니다. \n");
-////			textArea.append(srchResult);
-////			textArea.append("\n");
-////			textArea.append(name);
-////
-////		}
-//	}
-//}
-//
-//class DeleteEventHandler implements ActionListener	//gui 삭제 도구
-//{
-////	JTextField delField;
-////	JTextArea textArea;
-//	
-//	public DeleteEventHandler(JTextField field, JTextArea area)
-//	{
-////		delField = field;
-////		textArea = area;
-//	}
-//	public void actionPerformed(ActionEvent e)
-//	{
-////		String name = delField.getText();
-////		PhoneBookManager manager = PhoneBookManager.createManagerInst();
-////		boolean isDeleted = manager.deleteData(name);
-////		if(isDeleted)
-////			textArea.append("데이터 삭제를 완료하였습니다. \n");
-////		else
-////			textArea.append("해당하는 데이터가 존재하지 않습니다. \n");
-//	}
-//}
-
-//class SearchDelFrame extends JFrame		//gui 버튼 도구
-//{
-//
-////	JTextField srchField = new JTextField(15);
-////	JButton srchBtn = new JButton("SEARCH");
-////	
-////	JTextField delField = new JTextField(15);
-////	JButton delBtn = new JButton("DEL");
-////	
-////	JTextArea textArea = new JTextArea(20,25);
-//
-//	public SearchDelFrame()			///gui
-//	{
-////		super("PhoneBookVer09");
-////		setBounds(100,200,330,450);
-////		setLayout(new BorderLayout());
-////		Border border = BorderFactory.createEtchedBorder();
-////		
-////
-////		Border srchBorder = BorderFactory.createTitledBorder(border,"Search");
-////		JPanel srchPanel = new JPanel();
-////		srchPanel.setBorder(srchBorder);
-////		srchPanel.setLayout(new FlowLayout());
-////		srchPanel.add(srchField);
-////		srchPanel.add(srchBtn);
-////		
-////		Border delBorder = BorderFactory.createTitledBorder(border,"Delete");
-////		JPanel delPanel = new JPanel();
-////		delPanel.setBorder(delBorder);
-////		delPanel.setLayout(new FlowLayout());
-////		delPanel.add(delField);
-////		delPanel.add(delBtn);
-////		
-////		JScrollPane scrollTextArea = new JScrollPane(textArea);
-////		Border textBorder = BorderFactory.createTitledBorder(border,"Infomation Board");
-////		scrollTextArea.setBorder(textBorder);
-////
-////		add(srchPanel, BorderLayout.NORTH);
-////		add(delPanel, BorderLayout.SOUTH);
-////		add(scrollTextArea, BorderLayout.CENTER);
-////		
-////		srchBtn.addActionListener(new SearchEventHandler(srchField, textArea));
-////		delBtn.addActionListener(new DeleteEventHandler(delField, textArea));
-////		
-////		setVisible(true);
-////		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-//	}
-//}
 
 class KwanRiJa {
 
-	static {
+	static {	//오라클 연동
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 		}catch(ClassNotFoundException cnfe) {
 			cnfe.printStackTrace();
 		}
 	}
+	
 	public static void main(String[] args) {
 
-
 		MatZipManager manager = MatZipManager.createManagerInst();
-		int choice;
-		
-	
+		int choice;	
 		
 		while(true)
 		{
@@ -658,6 +661,9 @@ class KwanRiJa {
 					break;
 				case INIT_MENU.INPUT:
 					manager.inputData();
+					break;
+				case INIT_MENU.STAR :
+					manager.Star();
 					break;
 				case INIT_MENU.EXIT:
 					System.out.println("프로그랭을 종료합니다.");
