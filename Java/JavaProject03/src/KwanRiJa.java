@@ -20,7 +20,7 @@ interface INPUT_SELECT	//2.데이터 입력
 }
 interface INPUT_STAR	//3.즐겨찾기
 {
-	int LIST =1, ADD = 2,DEL = 3;
+	int LIST =1, ADD = 2,DEL = 3, GANGSIN=4;
 }
 class MenuChoiceException extends Exception	//잘못된 선택을 한 경우
 {
@@ -37,6 +37,8 @@ class MenuChoiceException extends Exception	//잘못된 선택을 한 경우
 		System.out.println(wrongChoice + "에 해당하는 선택은 존재하지 않습니다.");
 	}
 }
+
+
 ////////////////////////////////////////////////////////////
 class MatZiplist implements Serializable{}
 
@@ -56,160 +58,10 @@ class MatZipManager	//메인코드
 	
 	/////////////////////////////////////////////////////////
 	
-	private MatZiplist Addname()	//2-1번 데이터 추가 
-	{
-		try {
-			Connection con = DriverManager.getConnection(
-					"jdbc:oracle:thin:@localhost:1521:xe",
-					"scott",
-					"tiger");
-			Statement stmt = con.createStatement();
-			
-			System.out.print("가게이름 :");
-			String name = MenuViewer.keyboard.nextLine();
-			System.out.print("음식종류 :");
-			String food3 = MenuViewer.keyboard.nextLine();
-			System.out.print("지역 :");
-			String sido = MenuViewer.keyboard.nextLine();
-			System.out.print("시군구 :");
-			String gigungu = MenuViewer.keyboard.nextLine();
-			System.out.print("내용 :");
-			String data = MenuViewer.keyboard.nextLine();
-		
-			StringBuffer sb = new StringBuffer();
-			sb.append("insert into JAVAPROJECT values('"+name+"', '"+food3+"', '"+sido+"', '"+gigungu+"', '"+data+"', '0','0','0')");		
-			ResultSet rs = stmt.executeQuery(sb.toString());
-			
-			int rss = stmt.getUpdateCount();
-			if(rss > 0) {
-				System.out.println("성공적으로 가게를 생성하였습니다.  \n");
-			}else {
-				throw new SQLException();
-			}
-
-			rs.close();
-			stmt.close();
-			con.close();
-		}catch(SQLException sqle) {
-			System.out.println("검색값이 존재하지 않습니다.");
-		}
-		return null;	
-	}
-
-	private MatZiplist Sujungname()	//2-2번 데이터 수정
-	{
-		try {
-			Connection con = DriverManager.getConnection(
-					"jdbc:oracle:thin:@localhost:1521:xe",
-					"scott",
-					"tiger");
-
-			System.out.print("수정하고 싶은 가게이름 :");
-			String name = MenuViewer.keyboard.nextLine();
-			System.out.print("수정할 가게이름 :");
-			String select = MenuViewer.keyboard.nextLine();
-			System.out.print("수정할 음식종류 :");
-			String select2 = MenuViewer.keyboard.nextLine();
-			System.out.print("수정할 지역 :");
-			String select3 = MenuViewer.keyboard.nextLine();
-			System.out.print("수정할 시군구 :");
-			String select4 = MenuViewer.keyboard.nextLine();
-			System.out.print("수정할 내용 :");
-			String select5 = MenuViewer.keyboard.nextLine();	
-
-			Statement stmt = con.createStatement();
-			StringBuffer sb = new StringBuffer();
-			sb.append("update javaproject set name = '"+select+"', food3 = '"+select2+"', sido = '"+select3+"', gigungu = '"+select4+"', data = '"+select5+"' where name = '"+name+"'");
-			con.commit();
-			stmt.executeUpdate(sb.toString());
-			
-			int rs = stmt.getUpdateCount();
-			if(rs > 0) {
-				System.out.println("성공적으로 수정에 성공했습니다.  \n");
-			}else {
-				throw new SQLException();
-			}
-			
-			stmt.close();
-			con.close();
-		}catch(SQLException sqle) {
-			System.out.println("검색값이 존재하지 않습니다.");
-		}
-		return null;	
-	}
-	
-	private MatZiplist Delname()	//2-3번 데이터 삭제 
-	{
-		try {
-			Connection con = DriverManager.getConnection(
-					"jdbc:oracle:thin:@localhost:1521:xe",
-					"scott",
-					"tiger");
-
-			System.out.print("가게이름 :");
-			String name = MenuViewer.keyboard.nextLine();
-		
-			Statement stmt = con.createStatement();
-			StringBuffer sb = new StringBuffer();
-			sb.append("delete from JAVAPROJECT where name = '"+name+"'");	
-			stmt.executeUpdate(sb.toString());
-			
-			int rs = stmt.getUpdateCount();
-			if(rs > 0) {
-				System.out.println("성공적으로 삭제를 완료하였습니다.  \n");
-			}else {
-				throw new SQLException();
-			}
-			
-			stmt.close();
-			con.close();
-		}catch(SQLException sqle) {
-			System.out.println("검색값이 존재하지 않습니다.");
-		}
-		return null;	
-	}
-	
-	public void inputData() throws MenuChoiceException	//2번 메뉴
-	{
-		System.out.println("데이터 입력을 시작합니다...");	
-		System.out.println("1.추가, 2.수정, 3.삭제 ");
-		System.out.print("선택>> ");
-		int choice = MenuViewer.keyboard.nextInt();
-		MenuViewer.keyboard.nextLine();
-		MatZiplist info = null;
-		
-		if(choice<INPUT_SELECT.CHUGA || choice>INPUT_SELECT.SAKJAE)
-			throw new MenuChoiceException(choice);
-		
-		switch(choice)
-		{
-		case INPUT_SELECT.CHUGA :
-			info=Addname();
-			break;
-		case INPUT_SELECT.SUJUNG :
-			info=Sujungname();
-			break;
-		case INPUT_SELECT.SAKJAE :
-			info=Delname();
-			break;
-		}
-		
-//		boolean isAdded = infoStorage.add(info);
-//		if(isAdded == true)
-//			System.out.println("데이터 입력이 완료되었습니다. \n");
-//		else
-//			System.out.println("잘못된 데이터 입니다. \n");
-	}
-
-	////////////////////////////////////////////////////////	
-	
 	private MatZiplist Dataname()	//1-1번 가게이름
 	{
 		try {
-			Connection con = DriverManager.getConnection(
-					"jdbc:oracle:thin:@localhost:1521:xe",
-					"scott",
-					"tiger");
+			Connection con = ConnectionPool.getConnection();
 			Statement stmt = con.createStatement();
 			
 			System.out.print("가게 이름 혹은 키워드를 적으세요 :");
@@ -258,10 +110,7 @@ class MatZipManager	//메인코드
 
 	{
 		try {
-			Connection con = DriverManager.getConnection(
-					"jdbc:oracle:thin:@localhost:1521:xe",
-					"scott",
-					"tiger");
+			Connection con = ConnectionPool.getConnection();
 			Statement stmt = con.createStatement();
 			
 			System.out.println("예시 : 카페/전통찻집, 서양식, 아시아식, 채식, 한식, 중식, 일식, 패밀리레스토랑, 이색음식");		
@@ -311,10 +160,7 @@ class MatZipManager	//메인코드
 	private MatZiplist Datasido()	//1-3번 지역
 	{
 		try {
-			Connection con = DriverManager.getConnection(
-					"jdbc:oracle:thin:@localhost:1521:xe",
-					"scott",
-					"tiger");
+			Connection con = ConnectionPool.getConnection();
 			Statement stmt = con.createStatement();
 			
 			System.out.print("도시를 적으세요 :");
@@ -365,10 +211,7 @@ class MatZipManager	//메인코드
 	private MatZiplist Datajumgsu() //1-4번 평점 주기
 	{
 		try {
-			Connection con = DriverManager.getConnection(
-					"jdbc:oracle:thin:@localhost:1521:xe",
-					"scott",
-					"tiger");
+			Connection con = ConnectionPool.getConnection();
 			Statement stmt = con.createStatement();
 			
 			System.out.print("점수를 줄 가게이름 :");
@@ -406,10 +249,7 @@ class MatZipManager	//메인코드
 	private MatZiplist Datarank() 	//1-5번 평점 랭킹
 	{
 		try {
-			Connection con = DriverManager.getConnection(
-					"jdbc:oracle:thin:@localhost:1521:xe",
-					"scott",
-					"tiger");
+			Connection con = ConnectionPool.getConnection();
 			Statement stmt = con.createStatement();
 			
 			StringBuffer sb = new StringBuffer();
@@ -476,13 +316,147 @@ class MatZipManager	//메인코드
 	
 	/////////////////////////////////////////////////////
 	
+	private MatZiplist Addname()	//2-1번 데이터 추가 
+	{
+		try {
+			Connection con = ConnectionPool.getConnection();
+			Statement stmt = con.createStatement();
+			
+			System.out.print("가게이름 :");
+			String name = MenuViewer.keyboard.nextLine();
+			System.out.print("음식종류 :");
+			String food3 = MenuViewer.keyboard.nextLine();
+			System.out.print("지역 :");
+			String sido = MenuViewer.keyboard.nextLine();
+			System.out.print("시군구 :");
+			String gigungu = MenuViewer.keyboard.nextLine();
+			System.out.print("내용 :");
+			String data = MenuViewer.keyboard.nextLine();
+		
+			StringBuffer sb = new StringBuffer();
+			sb.append("insert into JAVAPROJECT values('"+name+"', '"+food3+"', '"+sido+"', '"+gigungu+"', '"+data+"', '0','0','0')");		
+			ResultSet rs = stmt.executeQuery(sb.toString());
+		
+			int rss = stmt.getUpdateCount();
+			if(rss > 0) {
+					System.out.println("성공적으로 가게를 생성하였습니다.  \n");
+						}else {
+							throw new SQLException();
+						}
+
+			rs.close();
+			stmt.close();
+			con.close();
+			}catch(SQLException sqle) {
+			System.out.println("같은 이름이 존재합니다.");
+		}
+		return null;	
+	}
+
+	private MatZiplist Sujungname()	//2-2번 데이터 수정
+	{
+		try {
+			Connection con = ConnectionPool.getConnection();
+
+			System.out.print("수정하고 싶은 가게이름 :");
+			String name = MenuViewer.keyboard.nextLine();
+			System.out.print("수정할 가게이름 :");
+			String select = MenuViewer.keyboard.nextLine();
+			System.out.print("수정할 음식종류 :");
+			String select2 = MenuViewer.keyboard.nextLine();
+			System.out.print("수정할 지역 :");
+			String select3 = MenuViewer.keyboard.nextLine();
+			System.out.print("수정할 시군구 :");
+			String select4 = MenuViewer.keyboard.nextLine();
+			System.out.print("수정할 내용 :");
+			String select5 = MenuViewer.keyboard.nextLine();	
+
+			Statement stmt = con.createStatement();
+			StringBuffer sb = new StringBuffer();
+			sb.append("update javaproject set name = '"+select+"', food3 = '"+select2+"', sido = '"+select3+"', gigungu = '"+select4+"', data = '"+select5+"' where name = '"+name+"'");
+			con.commit();
+			stmt.executeUpdate(sb.toString());
+			int rs = stmt.getUpdateCount();
+			if(rs > 0) {
+				System.out.println("성공적으로 수정에 성공했습니다.  \n");
+			}else {
+				throw new SQLException();
+			}
+			
+			stmt.close();
+			con.close();
+		}catch(SQLException sqle) {
+			System.out.println("검색값이 존재하지 않습니다.");
+		}
+		return null;	
+	}
+	
+	private MatZiplist Delname()	//2-3번 데이터 삭제 
+	{
+		try {
+			Connection con = ConnectionPool.getConnection();
+
+			System.out.print("가게이름 :");
+			String name = MenuViewer.keyboard.nextLine();
+		
+			Statement stmt = con.createStatement();
+			StringBuffer sb = new StringBuffer();
+			sb.append("delete from JAVAPROJECT where name = '"+name+"'");	
+			stmt.executeUpdate(sb.toString());
+			
+			int rs = stmt.getUpdateCount();
+			if(rs > 0) {
+				System.out.println("성공적으로 삭제를 완료하였습니다.  \n");
+			}else {
+				throw new SQLException();
+			}
+			
+			stmt.close();
+			con.close();
+		}catch(SQLException sqle) {
+			System.out.println("검색값이 존재하지 않습니다.");
+		}
+		return null;	
+	}
+	
+	public void inputData() throws MenuChoiceException	//2번 메뉴
+	{
+		System.out.println("데이터 입력을 시작합니다...");	
+		System.out.println("1.추가, 2.수정, 3.삭제 ");
+		System.out.print("선택>> ");
+		int choice = MenuViewer.keyboard.nextInt();
+		MenuViewer.keyboard.nextLine();
+		MatZiplist info = null;
+		
+		if(choice<INPUT_SELECT.CHUGA || choice>INPUT_SELECT.SAKJAE)
+			throw new MenuChoiceException(choice);
+		
+		switch(choice)
+		{
+		case INPUT_SELECT.CHUGA :
+			info=Addname();
+			break;
+		case INPUT_SELECT.SUJUNG :
+			info=Sujungname();
+			break;
+		case INPUT_SELECT.SAKJAE :
+			info=Delname();
+			break;
+		}
+		
+//		boolean isAdded = infoStorage.add(info);
+//		if(isAdded == true)
+//			System.out.println("데이터 입력이 완료되었습니다. \n");
+//		else
+//			System.out.println("잘못된 데이터 입니다. \n");
+	}
+
+	////////////////////////////////////////////////////////		
+	
 	private MatZiplist Starlist() 	//3-1번 즐겨찾기 리스트
 	{
 		try {
-			Connection con = DriverManager.getConnection(
-					"jdbc:oracle:thin:@localhost:1521:xe",
-					"scott",
-					"tiger");
+			Connection con = ConnectionPool.getConnection();
 			Statement stmt = con.createStatement();
 		
 			StringBuffer sb = new StringBuffer();
@@ -523,10 +497,7 @@ class MatZipManager	//메인코드
 	private MatZiplist Staradd()	//3-2번 즐겨찾기 추가 
 	{
 		try {
-			Connection con = DriverManager.getConnection(
-					"jdbc:oracle:thin:@localhost:1521:xe",
-					"scott",
-					"tiger");
+			Connection con = ConnectionPool.getConnection();
 			Statement stmt = con.createStatement();
 			
 			System.out.print("가게이름 :");
@@ -555,10 +526,7 @@ class MatZipManager	//메인코드
 	private MatZiplist Stardel()	//3-3번 즐겨찾기 삭제 
 	{
 		try {
-			Connection con = DriverManager.getConnection(
-					"jdbc:oracle:thin:@localhost:1521:xe",
-					"scott",
-					"tiger");
+			Connection con = ConnectionPool.getConnection();
 
 			System.out.print("가게이름 :");
 			String name = MenuViewer.keyboard.nextLine();
@@ -582,18 +550,37 @@ class MatZipManager	//메인코드
 		}
 		return null;	
 	}	
-	
+
+	private MatZiplist Stargangsin() 	//3-4번 즐겨찾기 갱신
+	{
+		try {
+			Connection con = ConnectionPool.getConnection();
+			Statement stmt = con.createStatement();
+		
+			StringBuffer sb = new StringBuffer();
+			sb.append("insert into javaproject2 select * from javaproject where name in (select name from javaproject2)");
+			ResultSet rs = stmt.executeQuery(sb.toString());
+			System.out.println("즐겨찾기가 갱신되었습니다.");
+			rs.close();
+			stmt.close();
+			con.close();
+		}catch(SQLException sqle) {
+			System.out.println("즐겨찾기가 잘못댔습니다.");
+		}	
+		return null;
+	}
+			
 	public void Star() throws MenuChoiceException	//3번 메뉴
 	{
 		System.out.println("즐겨찾기를 시작합니다...");
 		System.out.println("검색하실 종류를 선택하세요...");
-		System.out.println("1.즐겨찾기 리스트  2.즐겨찾기 추가 3.즐겨찾기 삭제");
+		System.out.println("1.즐겨찾기 리스트  2.즐겨찾기 추가 3.즐겨찾기 삭제 4.즐겨찾기 갱신");
 		System.out.print("선택>> ");
 		int choice = MenuViewer.keyboard.nextInt();
 		MenuViewer.keyboard.nextLine();
 		MatZiplist info = null;
 
-		if(choice<INPUT_STAR.LIST || choice>INPUT_STAR.DEL)
+		if(choice<INPUT_STAR.LIST || choice>INPUT_STAR.GANGSIN)
 			throw new MenuChoiceException(choice);
 	
 		switch(choice)
@@ -607,8 +594,13 @@ class MatZipManager	//메인코드
 		case INPUT_STAR.DEL :
 			info=Stardel();
 			break;
+		case INPUT_STAR.GANGSIN :
+			info=Stargangsin();
+			break;
 		}
 		}
+
+	//////////////////////////////////////////////////////
 }
 
 class MenuViewer
@@ -636,10 +628,11 @@ class KwanRiJa {
 		}catch(ClassNotFoundException cnfe) {
 			cnfe.printStackTrace();
 		}
-	}
+	}	
 	
 	public static void main(String[] args) {
 
+		
 		MatZipManager manager = MatZipManager.createManagerInst();
 		int choice;	
 		
