@@ -20,7 +20,7 @@ interface INPUT_SELECT	//2.데이터 입력
 }
 interface INPUT_STAR	//3.즐겨찾기
 {
-	int LIST =1, ADD = 2,DEL = 3, GANGSIN=4;
+	int LIST =1, ADD = 2,DEL = 3;
 }
 class MenuChoiceException extends Exception	//잘못된 선택을 한 경우
 {
@@ -551,36 +551,18 @@ class MatZipManager	//메인코드
 		return null;	
 	}	
 
-	private MatZiplist Stargangsin() 	//3-4번 즐겨찾기 갱신
-	{
-		try {
-			Connection con = ConnectionPool.getConnection();
-			Statement stmt = con.createStatement();
 		
-			StringBuffer sb = new StringBuffer();
-			sb.append("insert into javaproject2 select * from javaproject where name in (select name from javaproject2)");
-			ResultSet rs = stmt.executeQuery(sb.toString());
-			System.out.println("즐겨찾기가 갱신되었습니다.");
-			rs.close();
-			stmt.close();
-			con.close();
-		}catch(SQLException sqle) {
-			System.out.println("즐겨찾기가 잘못댔습니다.");
-		}	
-		return null;
-	}
-			
 	public void Star() throws MenuChoiceException	//3번 메뉴
 	{
 		System.out.println("즐겨찾기를 시작합니다...");
 		System.out.println("검색하실 종류를 선택하세요...");
-		System.out.println("1.즐겨찾기 리스트  2.즐겨찾기 추가 3.즐겨찾기 삭제 4.즐겨찾기 갱신");
+		System.out.println("1.즐겨찾기 리스트  2.즐겨찾기 추가 3.즐겨찾기 삭제");
 		System.out.print("선택>> ");
 		int choice = MenuViewer.keyboard.nextInt();
 		MenuViewer.keyboard.nextLine();
 		MatZiplist info = null;
 
-		if(choice<INPUT_STAR.LIST || choice>INPUT_STAR.GANGSIN)
+		if(choice<INPUT_STAR.LIST || choice>INPUT_STAR.DEL)
 			throw new MenuChoiceException(choice);
 	
 		switch(choice)
@@ -593,9 +575,6 @@ class MatZipManager	//메인코드
 			break;			
 		case INPUT_STAR.DEL :
 			info=Stardel();
-			break;
-		case INPUT_STAR.GANGSIN :
-			info=Stargangsin();
 			break;
 		}
 		}
