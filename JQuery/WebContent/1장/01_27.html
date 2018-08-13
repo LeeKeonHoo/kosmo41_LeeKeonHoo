@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src= "http://code.jquery.com/jquery.js"></script>
+	<script>
+		$(document).ready (function (){
+			//변수를 선언합니다
+			var array = {
+					{ name: 'google', link: 'http://google.com'}
+					{ name: 'naver', link: 'http://naver.com'}
+					{ name: 'daum', link: 'http://daum.net'}
+			}
+			
+			//$.each()메서드를 사용합니다
+			$.each(array, function(index,item){
+				//변수를 선언합니다
+				var output =' ';
+				//문자열을 만듭니다
+				output += '<a href="' + item.link + '">';
+				output += '<h1>' + item.name + '<h1>';
+				output += '<a>';
+				document.body.innerHTML += output;
+			});
+		});
+	</script>
+</head>
+<body>
+
+</body>
+</html>
