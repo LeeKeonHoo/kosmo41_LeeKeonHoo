@@ -1,5 +1,5 @@
-<%@ page import ="com.study.jsp.MemberDto"  %>
-<%@ page import ="com.study.jsp.MemberDao"  %>
+<%@ page import ="com.study.jsp.BDto"  %>
+<%@ page import ="com.study.jsp.BDao"  %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
@@ -8,7 +8,7 @@
 	String id = request.getParameter("id");	
 	String pw = request.getParameter("pw");
 
-	MemberDao dao = MemberDao.getInstance();
+	BDao dao = BDao.getInstance();
 	int checkNum = dao.userCheck(id, pw);
 	if(checkNum == -1){
 %>
@@ -25,7 +25,7 @@
 	</script>
 <%
 	}else if(checkNum ==1){
-		MemberDto dto = dao.getMember(id);
+		BDto dto = dao.getMember(id);
 		
 		if(dto ==null){
 %>
