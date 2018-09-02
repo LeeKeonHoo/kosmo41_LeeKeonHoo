@@ -15,35 +15,40 @@
 	
 	<table width="500" cellpadding="0" cellspacing="0" border="1">
 		<form action="reply.do" method="post">
-			<input type="hidden" name="bId" value="${content_view.bId}">
-			<input type="hidden" name="bGroup" value="${content_view.bGroup}">
-			<input type="hidden" name="bStep" value="${content_view.bStep}">
-			<input type="hidden" name="bIndent" value="${content_view.bIndent}">
+			<input type="hidden" name="bId" value="${reply_view.bId}">
+			<input type="hidden" name="bGroup" value="${reply_view.bGroup}">
+			<input type="hidden" name="bStep" value="${reply_view.bStep}">
+			<input type="hidden" name="bIndent" value="${reply_view.bIndent}">
 			<tr>
 				<td>번호</td>
-				<td>${content_view.bId}</td>
+				<td>${reply_view.bId}</td>
 			</tr>
 			<tr>
 				<td>히트</td>
-				<td>${content_view.bHit}</td>
+				<td>${reply_view.bHit}</td>
 			</tr>
 			<tr>
 				<td>이름</td>
-				<td><input type="text" name="bName" value="${content_view.bName}"></td>
+				<td><input type="text" name="bName" value=""></td>
 			</tr>
 			<tr>
 				<td>제목</td>
-				<td><input type="text" name="bTitle" value="${content_view.bTitle}"></td>
+				<td><input type="text" name="bTitle" value="${reply_view.bTitle} -"></td>
 			</tr>
 			<tr>
+				<td>원문내용</td>
+				<td>${reply_view.bContent}</td>
+			</tr>
+			<tr>
+			
 				<td>내용</td>
 				<td>
-					<textarea rows="10" name="bContent" >${content_view.bContent}</textarea>
+					<textarea rows="10" name="bContent" ></textarea>
 				</td>
 			</tr>
 			<tr >
 				<td colspan="2">
-				<input type="submit" value="답변"><a href="list.do">목록보기</a>
+				<input type="submit" value="답변"><a href="list.do?page=<%= session.getAttribute("cpage") %>">목록보기</a>
 				</td>
 			</tr>
 		</form>

@@ -17,6 +17,7 @@ import com.study.jsp.command.BListCommand;
 import com.study.jsp.command.BModifyCommand;
 import com.study.jsp.command.BReplyCommand;
 import com.study.jsp.command.BReplyViewCommand;
+import com.study.jsp.command.BSearchCommand;
 import com.study.jsp.command.BWriteCommand;
 
 @WebServlet("*.do")
@@ -53,44 +54,51 @@ public class FrontController extends HttpServlet {
 			curPage = (int)session.getAttribute("cpage");
 		}
 		
-		if(com.equals("/write_view.do")) {
+		if(com.equals("/write_view.do")) {	//작성글 메뉴
 			viewPage = "write_view.jsp";
-		}else if(com.equals("/write.do")){
+		}else if(com.equals("/write.do")){	//글작성 버튼
 			command = new BWriteCommand();
 			command.execute(request, response);
 			viewPage ="list.do";
-		}else if(com.equals("/list.do")) {
+		}else if(com.equals("/list.do")) {	//전체 리스트
 			command = new BListCommand();
 			command.execute(request, response);
 			viewPage ="list.jsp";
-		}else if(com.equals("/content_view.do")){
+		}else if(com.equals("/content_view.do")){	//선택한 글 메뉴
 			command = new BContentCommand();
 			command.execute(request, response);
 			viewPage = "content_view.jsp";
-		}else if(com.equals("/modify_view.do")){
+		}else if(com.equals("/modify_view.do")){	//수정 글 메뉴
 			command = new BContentCommand();
 			command.execute(request, response);
 			viewPage = "modify_view.jsp";		
-		}else if(com.equals("/modify.do")){
+		}else if(com.equals("/modify.do")){		//수정	글 보기
 			command = new BModifyCommand();
 			command.execute(request, response);
 
 			command = new BContentCommand();
 			command.execute(request, response);
 			viewPage = "content_view.jsp";		
-		}else if(com.equals("/delete.do")){
+		}else if(com.equals("/delete.do")){	//글 삭제
 			command = new BDeleteCommand();
 			command.execute(request, response);
 			viewPage = "list.do?page="+curPage;		
-		}else if(com.equals("/reply_view.do")){
+		}else if(com.equals("/reply_view.do")){	//답변 달기 메뉴
 			command = new BReplyViewCommand();
 			command.execute(request, response);
 			viewPage = "reply_view.jsp";		
-		}else if(com.equals("/reply.do")){
+		}else if(com.equals("/reply.do")){	//답변 글 보기
 			command = new BReplyCommand();
 			command.execute(request, response);
 			viewPage = "list.do?page="+curPage;	
 		}
+		
+			else if(com.equals("/search.do")){	//검색
+			command = new BSearchCommand();
+			command.execute(request, response);
+			viewPage = "list.do?page="+curPage;	
+		}
+		
 	
 		RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);
 		dispatcher.forward(request, response);

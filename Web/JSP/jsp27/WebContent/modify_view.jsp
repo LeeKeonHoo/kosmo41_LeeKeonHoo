@@ -1,16 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<script src="https://cdn.ckeditor.com/4.10.0/standard/ckeditor.js"></script>   
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-</head>
 	<script>
 		function form_check(){
 			document.modify_form.submit();
 		}
 	</script>
+</head>
 <body>
 	
 	<table width="500" cellpadding="0" cellspacing="0" border="1">
@@ -35,14 +36,19 @@
 			<tr>
 				<td>내용</td>
 				<td>
-					<textarea rows="10" name="bContent" >${content_view.bContent}</textarea>
+					<textarea rows="10" id="editor1"  cols="80" name="bContent" >${content_view.bContent}</textarea>
+          		    <script>
+                // Replace the <textarea id="editor1"> with a CKEditor
+                // instance, using default configuration.
+               		 CKEDITOR.replace( 'editor1' );
+            		</script>
 				</td>
 			</tr>
 			<tr >
 				<td colspan="2">
 				<a href="javascript:form_check();">수정완료</a> &nbsp;&nbsp;
 				<a href="content_view.do?bId=${content_view.bId}">취소</a> &nbsp;&nbsp;
-				<a href="list.do">목록보기</a> &nbsp;&nbsp;
+				<a href="list.do?page=<%= session.getAttribute("cpage") %>">목록보기</a> &nbsp;&nbsp;
 				</td>
 			</tr>
 		</form>

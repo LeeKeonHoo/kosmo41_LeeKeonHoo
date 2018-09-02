@@ -10,7 +10,7 @@ import com.study.jsp.BDao;
 import com.study.jsp.BDto;
 import com.study.jsp.BPageInfo;
 
-public class BListCommand implements BCommand {
+public class BSearchCommand implements BCommand {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {

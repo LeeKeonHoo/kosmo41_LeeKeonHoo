@@ -406,4 +406,54 @@ public class BDao {
 		}
 	}
 	
+	public void search(String bTitle) {			//검색
+
+		ArrayList<BDto> dtos = new ArrayList<BDto>();
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet resultSet = null;
+
+		String query = "select * from mvc_board btitle like '%?%'";
+
+		try {
+			con = dataSource.getConnection();
+			pstmt = con.prepareStatement(query);
+			pstmt.setString(1, bTitle);
+			int rn = pstmt.executeUpdate();
+			while(resultSet.next()) {
+				int bId = resultSet.getInt("bId");
+				String bName =resultSet.getString("bName");
+				String bTitle2 =resultSet.getString("bTitle");
+				String bContent =resultSet.getString("bContent");
+				Timestamp bDate = resultSet.getTimestamp("bDate");
+				int bHit = resultSet.getInt("bHit");
+				int bGroup = resultSet.getInt("bGroup");
+				int bStep = resultSet.getInt("bStep");
+				int bIndent = resultSet.getInt("bIndent");
+				
+				BDto dto =new BDto(bId, bName, bTitle2, bContent, bDate,
+									bHit, bGroup, bStep, bIndent);
+				
+				dtos.add(dto);
+
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (resultSet != null) resultSet.close();
+				if (pstmt != null)	pstmt.close();
+				if (con != null)	con.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+	}
+
+	
+	
+	
+	
 }
+
