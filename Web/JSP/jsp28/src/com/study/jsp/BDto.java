@@ -13,9 +13,12 @@ public class BDto {
 	int bGroup;
 	int bStep;
 	int bIndent;
+	String food;
+	String sido;
+	String gigungu;
 	
 	public BDto(int bId, String bName, 	String bTitle, String bContent,	Timestamp bDate,
-			int bHit,int bGroup,int bStep,	int bIndent) {
+			int bHit,int bGroup,int bStep,	int bIndent, String food, String sido, String gigungu) {
 		this.bId=bId;
 		this.bName=bName;
 		this.bTitle=bTitle;
@@ -25,11 +28,38 @@ public class BDto {
 		this.bGroup=bGroup;
 		this.bStep=bStep;
 		this.bIndent=bIndent;
+		this.food=food;
+		this.sido=sido;
+		this.gigungu=gigungu;
 	}
 	
 	public int getbId() {
 		return bId;
 	}
+	public String getFood() {
+		return food;
+	}
+
+	public void setFood(String food) {
+		this.food = food;
+	}
+
+	public String getSido() {
+		return sido;
+	}
+
+	public void setSido(String sido) {
+		this.sido = sido;
+	}
+
+	public String getGigungu() {
+		return gigungu;
+	}
+
+	public void setGigungu(String gigungu) {
+		this.gigungu = gigungu;
+	}
+
 	public void setbId(int bId) {
 		this.bId = bId;
 	}

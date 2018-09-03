@@ -46,6 +46,8 @@ public class FrontController extends HttpServlet {
 		String uri =request.getRequestURI();
 		String conPath =request.getContextPath();
 		String com = uri.substring(conPath.length());
+
+		System.out.println(com);
 		
 		HttpSession session = null;
 		session = request.getSession();
@@ -94,9 +96,10 @@ public class FrontController extends HttpServlet {
 		}
 		
 			else if(com.equals("/search.do")){	//검색
+
 			command = new BSearchCommand();
 			command.execute(request, response);
-			viewPage = "list.do?page="+curPage;	
+			viewPage = "search.jsp";	
 		}
 		
 	

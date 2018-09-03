@@ -8,6 +8,8 @@ import javax.naming.InitialContext;
 import javax.servlet.annotation.WebServlet;
 import javax.sql.DataSource;
 
+import org.apache.catalina.connector.Request;
+
 public class BDao {
 
 	private static BDao instance = new BDao();
@@ -96,9 +98,12 @@ public class BDao {
 				int bGroup = resultSet.getInt("bGroup");
 				int bStep = resultSet.getInt("bStep");
 				int bIndent = resultSet.getInt("bIndent");
+				String food=resultSet.getString("food");
+				String sido=resultSet.getString("sido");
+				String gigungu=resultSet.getString("gigungu");
 				
 				BDto dto =new BDto(bId, bName, bTitle, bContent, bDate,
-									bHit, bGroup, bStep, bIndent);
+									bHit, bGroup, bStep, bIndent, food, sido, gigungu);
 				dtos.add(dto);
 			}
 		}catch(Exception e) {
@@ -203,9 +208,12 @@ public class BDao {
 				int bGroup =resultSet.getInt("bGroup");
 				int bStep =resultSet.getInt("bStep");
 				int bIndent =resultSet.getInt("bIndent");
+				String food=resultSet.getString("food");
+				String sido=resultSet.getString("sido");
+				String gigungu=resultSet.getString("gigungu");
 				
 				dto = new BDto(bId, bName, bTitle, bContent, bDate,
-								bHit, bGroup, bStep, bIndent);
+								bHit, bGroup, bStep, bIndent,food,sido,gigungu);
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -289,7 +297,6 @@ public class BDao {
 			pstmt.setString(1, bId);
 
 			int rn = pstmt.executeUpdate();	
-			
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
@@ -327,9 +334,12 @@ public class BDao {
 				int bGroup =resultSet.getInt("bGroup");
 				int bStep =resultSet.getInt("bStep");
 				int bIndent =resultSet.getInt("bIndent");
+				String food=resultSet.getString("food");
+				String sido=resultSet.getString("sido");
+				String gigungu=resultSet.getString("gigungu");
 				
 				dto = new BDto(bId, bName, bTitle, bContent, bDate,
-								bHit, bGroup, bStep, bIndent);
+								bHit, bGroup, bStep, bIndent,food,sido,gigungu);
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -406,20 +416,20 @@ public class BDao {
 		}
 	}
 	
-	public void search(String bTitle) {			//검색
-
+	public ArrayList<BDto> search(String search){		//
+		
 		ArrayList<BDto> dtos = new ArrayList<BDto>();
-		Connection con = null;
-		PreparedStatement pstmt = null;
+		Connection con =null;
+		PreparedStatement pstmt =null;
 		ResultSet resultSet = null;
-
-		String query = "select * from mvc_board btitle like '%?%'";
-
 		try {
 			con = dataSource.getConnection();
-			pstmt = con.prepareStatement(query);
-			pstmt.setString(1, bTitle);
-			int rn = pstmt.executeUpdate();
+			
+			String query ="select * from mvc_board where btitle like '%"+search+"%'";
+			
+			pstmt=con.prepareStatement(query);
+			resultSet = pstmt.executeQuery();
+			
 			while(resultSet.next()) {
 				int bId = resultSet.getInt("bId");
 				String bName =resultSet.getString("bName");
@@ -430,25 +440,28 @@ public class BDao {
 				int bGroup = resultSet.getInt("bGroup");
 				int bStep = resultSet.getInt("bStep");
 				int bIndent = resultSet.getInt("bIndent");
-				
-				BDto dto =new BDto(bId, bName, bTitle2, bContent, bDate,
-									bHit, bGroup, bStep, bIndent);
-				
-				dtos.add(dto);
-
-			}
+				String food=resultSet.getString("food");
+				String sido=resultSet.getString("sido");
+				String gigungu=resultSet.getString("gigungu");
 			
-		} catch (Exception e) {
+				BDto dto =new BDto(bId, bName, bTitle2, bContent, bDate,
+									bHit, bGroup, bStep, bIndent,food,sido,gigungu);
+				dtos.add(dto);
+				
+			}
+
+		}catch(Exception e) {
 			e.printStackTrace();
-		} finally {
+		}finally {
 			try {
-				if (resultSet != null) resultSet.close();
-				if (pstmt != null)	pstmt.close();
-				if (con != null)	con.close();
-			} catch (Exception e2) {
+				if(resultSet != null) resultSet.close();
+				if(pstmt != null) pstmt.close();
+				if(con != null) con.close();
+			}catch(Exception e2) {
 				e2.printStackTrace();
 			}
 		}
+		return dtos;
 	}
 
 	

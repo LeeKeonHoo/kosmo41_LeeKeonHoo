@@ -1,5 +1,5 @@
-<%@ page import ="com.study.jsp.BDto"  %>
-<%@ page import ="com.study.jsp.BDao"  %>
+<%@ page import ="com.study.jsp.login.BDto"  %>
+<%@ page import ="com.study.jsp.login.BDao"  %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%

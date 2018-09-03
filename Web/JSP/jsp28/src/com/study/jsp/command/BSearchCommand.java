@@ -15,14 +15,21 @@ public class BSearchCommand implements BCommand {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
 		
+
+		String search =request.getParameter("search");
+		
+		
 		int nPage=1;
 		try {
 			String sPage =request.getParameter("page");
 			nPage =Integer.parseInt(sPage);
+
 		}catch(Exception e) {
 		}
 		
 		BDao dao = BDao.getInstance();
+		dao.search(search);
+
 		BPageInfo pinfo = dao.articlePage(nPage);
 		request.setAttribute("page", pinfo);
 
@@ -33,10 +40,8 @@ public class BSearchCommand implements BCommand {
 		session.setAttribute("cpage", nPage);
 		
 		
-		ArrayList<BDto> dtos = dao.list(nPage);
-		request.setAttribute("list", dtos);
+		ArrayList<BDto> dtos = dao.search(search);
+		request.setAttribute("search", dtos);
 		
-
 	}
-
 }
