@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
 import org.apache.catalina.connector.Request;
@@ -32,14 +34,14 @@ public class BDao {
 		return instance;
 	}
 
-	public void write(String bName,String bTitle,String bContent) {			//작성
+	public void write(String bName,String bTitle,String bContent,String filename,String food, String sido, String gigungu) {			//작성
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		String query = "insert into mvc_board " +
-						"(bId, bName, bTitle, bContent, bHit, bGroup, bStep, bIndent) " +
+						"(bId, bName, bTitle, bContent, bHit, bGroup, bStep, bIndent, manscore, sumscore, avgscore, upload,food, sido, gigungu) " +
 						"values " + 
-						"(mvc_board_seq.nextval, ?, ?, ?, 0, mvc_board_seq.currval, 0, 0)";
+						"(mvc_board_seq.nextval, ?, ?, ?, 0, mvc_board_seq.currval, 0, 0, 0, 0, 0, ?, ? ,? ,?)";
 
 		try {
 			con = dataSource.getConnection();
@@ -47,6 +49,10 @@ public class BDao {
 			pstmt.setString(1, bName);
 			pstmt.setString(2, bTitle);
 			pstmt.setString(3, bContent);
+			pstmt.setString(4, filename);
+			pstmt.setString(5, food);
+			pstmt.setString(6, sido);
+			pstmt.setString(7, gigungu);
 			int rn = pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -60,7 +66,7 @@ public class BDao {
 		}
 	}
 	
-	public ArrayList<BDto> list(int curPage){		//목록 10개씩 분리
+	public ArrayList<BDto> list(int curPage, String search, String option){		//목록 10개씩 분리
 		
 		ArrayList<BDto> dtos = new ArrayList<BDto>();
 		Connection con =null;
@@ -73,6 +79,7 @@ public class BDao {
 		try {
 			con = dataSource.getConnection();
 			
+			if(option == null) {
 			String query ="select * " +
 					  	  "  from ( " +
 						  "	   select rownum num, A.* " +
@@ -86,6 +93,112 @@ public class BDao {
 			pstmt=con.prepareStatement(query);
 			pstmt.setInt(1, nEnd);
 			pstmt.setInt(2, nStart);
+			}
+			else if(option.equals("")) {
+			String query ="select * " +
+					  	  "  from ( " +
+						  "	   select rownum num, A.* " +
+						  "	     from ( " +
+						  "	        select * " +
+						  "	          from mvc_board " +
+						  "	         order by bgroup desc, bstep asc ) A " +
+						  "	    where rownum <= ? ) B " +
+						  "	where B.num >= ? ";
+
+			pstmt=con.prepareStatement(query);
+			pstmt.setInt(1, nEnd);
+			pstmt.setInt(2, nStart);
+			}
+			else if (option.equals("1"))
+			{
+				String query ="select * " +
+					  	  "  from ( " +
+						  "	   select rownum num, A.* " +
+						  "	     from ( " +
+						  "	        select * " +
+						  "	          from mvc_board " +
+						  "             where bTitle like ? " +
+						  "	         order by bgroup desc, bstep asc ) A " +
+						  "	    where rownum <= ? ) B " +
+						  "	where B.num >= ? ";
+
+			pstmt=con.prepareStatement(query);
+			pstmt.setString(1, "%"+search+"%");
+			pstmt.setInt(2, nEnd);
+			pstmt.setInt(3, nStart);				
+			}
+			else if (option.equals("2"))
+			{
+				String query ="select * " +
+					  	  "  from ( " +
+						  "	   select rownum num, A.* " +
+						  "	     from ( " +
+						  "	        select * " +
+						  "	          from mvc_board " +
+						  "             where bName like ? " +
+						  "	         order by bgroup desc, bstep asc ) A " +
+						  "	    where rownum <= ? ) B " +
+						  "	where B.num >= ? ";
+
+			pstmt=con.prepareStatement(query);
+			pstmt.setString(1, "%"+search+"%");
+			pstmt.setInt(2, nEnd);
+			pstmt.setInt(3, nStart);				
+			}
+			else if (option.equals("3"))
+			{
+				String query ="select * " +
+					  	  "  from ( " +
+						  "	   select rownum num, A.* " +
+						  "	     from ( " +
+						  "	        select * " +
+						  "	          from mvc_board " +
+						  "             where food like ? " +
+						  "	         order by bgroup desc, bstep asc ) A " +
+						  "	    where rownum <= ? ) B " +
+						  "	where B.num >= ? ";
+
+			pstmt=con.prepareStatement(query);
+			pstmt.setString(1, "%"+search+"%");
+			pstmt.setInt(2, nEnd);
+			pstmt.setInt(3, nStart);				
+			}
+			else if (option.equals("4"))
+			{
+				String query ="select * " +
+					  	  "  from ( " +
+						  "	   select rownum num, A.* " +
+						  "	     from ( " +
+						  "	        select * " +
+						  "	          from mvc_board " +
+						  "             where sido like ? " +
+						  "	         order by bgroup desc, bstep asc ) A " +
+						  "	    where rownum <= ? ) B " +
+						  "	where B.num >= ? ";
+
+			pstmt=con.prepareStatement(query);
+			pstmt.setString(1, "%"+search+"%");
+			pstmt.setInt(2, nEnd);
+			pstmt.setInt(3, nStart);
+			}
+			else if (option.equals("5"))
+			{
+				String query ="select * " +
+					  	  "  from ( " +
+						  "	   select rownum num, A.* " +
+						  "	     from ( " +
+						  "	        select * " +
+						  "	          from mvc_board " +
+						  "             where gigungu like ? " +
+						  "	         order by bgroup desc, bstep asc ) A " +
+						  "	    where rownum <= ? ) B " +
+						  "	where B.num >= ? ";
+
+			pstmt=con.prepareStatement(query);
+			pstmt.setString(1, "%"+search+"%");
+			pstmt.setInt(2, nEnd);
+			pstmt.setInt(3, nStart);
+			}
 			resultSet = pstmt.executeQuery();
 			
 			while(resultSet.next()) {
@@ -101,9 +214,13 @@ public class BDao {
 				String food=resultSet.getString("food");
 				String sido=resultSet.getString("sido");
 				String gigungu=resultSet.getString("gigungu");
+				String manscore=resultSet.getString("manscore");
+				String sumscore=resultSet.getString("sumscore");
+				String avgscore=resultSet.getString("avgscore");
+				String upload=resultSet.getString("upload");
 				
 				BDto dto =new BDto(bId, bName, bTitle, bContent, bDate,
-									bHit, bGroup, bStep, bIndent, food, sido, gigungu);
+									bHit, bGroup, bStep, bIndent, food, sido, gigungu, manscore, sumscore, avgscore,upload);
 				dtos.add(dto);
 			}
 		}catch(Exception e) {
@@ -120,7 +237,7 @@ public class BDao {
 		return dtos;
 	}
 
-	public BPageInfo articlePage(int curPage) {
+	public BPageInfo articlePage(int curPage, String search, String option) {
 		Connection con =null;
 		PreparedStatement pstmt =null;
 		ResultSet resultSet = null;
@@ -130,8 +247,41 @@ public class BDao {
 		try {
 			con = dataSource.getConnection();
 			
-			String query = "select count(*) as total from mvc_board";
-			pstmt = con.prepareStatement(query);
+			
+			if(option ==null) {
+				String query = "select count(*) as total from mvc_board";
+				pstmt = con.prepareStatement(query);				
+			}
+			else if(option.equals("")) {
+				String query = "select count(*) as total from mvc_board";
+				pstmt = con.prepareStatement(query);				
+			}
+			else if(option.equals("1")) {
+				String query = "select count(*) as total from mvc_board where bTitle like ?";
+				pstmt = con.prepareStatement(query);
+				pstmt.setString(1, "%"+search+"%");				
+			}
+			else if(option.equals("2")) {
+				String query = "select count(*) as total from mvc_board where bName like ?";
+				pstmt = con.prepareStatement(query);
+				pstmt.setString(1, "%"+search+"%");				
+			}
+			else if(option.equals("3")) {
+				String query = "select count(*) as total from mvc_board where food like ?";
+				pstmt = con.prepareStatement(query);
+				pstmt.setString(1, "%"+search+"%");				
+			}
+			else if(option.equals("4")) {
+				String query = "select count(*) as total from mvc_board where sido like ?";
+				pstmt = con.prepareStatement(query);
+				pstmt.setString(1, "%"+search+"%");				
+			}
+			else if(option.equals("5")) {
+				String query = "select count(*) as total from mvc_board where gigungu like ?";
+				pstmt = con.prepareStatement(query);
+				pstmt.setString(1, "%"+search+"%");				
+			}
+
 			resultSet = pstmt.executeQuery();
 					
 			if(resultSet.next()) {
@@ -182,17 +332,19 @@ public class BDao {
 		return pinfo;
 	}
 	
-	public BDto contentView(String strId) {	//작성글 보기
+	public BDto contentView(String strId,HttpServletRequest request) {	//작성글 보기
 		upHit(strId);
 		
 		BDto dto =null;
 		Connection con =null;
 		PreparedStatement pstmt =null;
 		ResultSet resultSet = null;
-		
+		HttpSession session = request.getSession();
 		try {
 			con = dataSource.getConnection();
-			
+	
+			String sid = (String)session.getAttribute("id");
+
 			String query = "select * from mvc_board where bId =?";
 			pstmt = con.prepareStatement(query);
 			pstmt.setInt(1, Integer.parseInt(strId));
@@ -211,10 +363,26 @@ public class BDao {
 				String food=resultSet.getString("food");
 				String sido=resultSet.getString("sido");
 				String gigungu=resultSet.getString("gigungu");
-				
+				String manscore=resultSet.getString("manscore");
+				String sumscore=resultSet.getString("sumscore");
+				String avgscore=resultSet.getString("avgscore");
+				String upload=resultSet.getString("upload");
+							
 				dto = new BDto(bId, bName, bTitle, bContent, bDate,
-								bHit, bGroup, bStep, bIndent,food,sido,gigungu);
+								bHit, bGroup, bStep, bIndent,food,sido,gigungu,manscore,sumscore,avgscore, upload);
+		
+				if(sid.equals(bName)) {
+					session.setAttribute("check", "yes");
+				}
+				else if(sid.equals("admin")){			
+					session.setAttribute("check", "yes");
+				}
+				else
+				{
+					session.setAttribute("check", "no");
+				}
 			}
+			
 		}catch(Exception e) {
 			e.printStackTrace();
 		}finally {
@@ -229,15 +397,18 @@ public class BDao {
 		return dto;
 	}
 	
-	public void modify(String bId, String bName,String bTitle,String bContent) {	//수정
+	public void modify(String bId, String bName,String bTitle,String bContent, String food, String sido, String gigungu) {	//수정
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		String query = "update mvc_board " +
 						" set bName =?, " +
 						" bTitle =?, " +
-						" bContent =? " +
-						" where bId =?";
+						" bContent =?, " +
+						" food =?, " +
+						" sido =?, " +
+						" gigungu =? " +
+						" where bId =? ";
 						
 
 		try {
@@ -246,7 +417,10 @@ public class BDao {
 			pstmt.setString(1, bName);
 			pstmt.setString(2, bTitle);
 			pstmt.setString(3, bContent);
-			pstmt.setString(4, bId);
+			pstmt.setString(4, food);
+			pstmt.setString(5, sido);
+			pstmt.setString(6, gigungu);
+			pstmt.setString(7, bId);
 			int rn = pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -337,9 +511,14 @@ public class BDao {
 				String food=resultSet.getString("food");
 				String sido=resultSet.getString("sido");
 				String gigungu=resultSet.getString("gigungu");
+				String manscore=resultSet.getString("manscore");
+				String sumscore=resultSet.getString("sumscore");
+				String avgscore=resultSet.getString("avgscore");
+				String upload=resultSet.getString("upload");
 				
 				dto = new BDto(bId, bName, bTitle, bContent, bDate,
-								bHit, bGroup, bStep, bIndent,food,sido,gigungu);
+								bHit, bGroup, bStep, bIndent,food,sido,gigungu,manscore,sumscore,avgscore, upload);
+
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -416,56 +595,7 @@ public class BDao {
 		}
 	}
 	
-	public ArrayList<BDto> search(String search){		//
-		
-		ArrayList<BDto> dtos = new ArrayList<BDto>();
-		Connection con =null;
-		PreparedStatement pstmt =null;
-		ResultSet resultSet = null;
-		try {
-			con = dataSource.getConnection();
-			
-			String query ="select * from mvc_board where btitle like '%"+search+"%'";
-			
-			pstmt=con.prepareStatement(query);
-			resultSet = pstmt.executeQuery();
-			
-			while(resultSet.next()) {
-				int bId = resultSet.getInt("bId");
-				String bName =resultSet.getString("bName");
-				String bTitle2 =resultSet.getString("bTitle");
-				String bContent =resultSet.getString("bContent");
-				Timestamp bDate = resultSet.getTimestamp("bDate");
-				int bHit = resultSet.getInt("bHit");
-				int bGroup = resultSet.getInt("bGroup");
-				int bStep = resultSet.getInt("bStep");
-				int bIndent = resultSet.getInt("bIndent");
-				String food=resultSet.getString("food");
-				String sido=resultSet.getString("sido");
-				String gigungu=resultSet.getString("gigungu");
-			
-				BDto dto =new BDto(bId, bName, bTitle2, bContent, bDate,
-									bHit, bGroup, bStep, bIndent,food,sido,gigungu);
-				dtos.add(dto);
-				
-			}
 
-		}catch(Exception e) {
-			e.printStackTrace();
-		}finally {
-			try {
-				if(resultSet != null) resultSet.close();
-				if(pstmt != null) pstmt.close();
-				if(con != null) con.close();
-			}catch(Exception e2) {
-				e2.printStackTrace();
-			}
-		}
-		return dtos;
-	}
-
-	
-	
 	
 	
 }

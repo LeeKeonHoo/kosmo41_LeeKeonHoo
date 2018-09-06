@@ -1,6 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <script src="https://cdn.ckeditor.com/4.10.0/standard/ckeditor.js"></script>
+<%
+	if (session.getAttribute("ValidMem") == null) {
+%>
+<jsp:forward page="login.jsp" />
+<%
+	}
+
+	String name = (String) session.getAttribute("name");
+	String id = (String) session.getAttribute("id");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -52,13 +62,25 @@
 					<td>${reply_view.bHit}</td>
 				</tr>
 				<tr>
+					<th scope="row">종류</th>
+					<td>${reply_view.food}</td>
+				</tr>
+				<tr>
+					<th scope="row">지역</th>
+					<td>${reply_view.sido}</td>
+				</tr>
+				<tr>
+					<th scope="row">시군구</th>
+					<td>${reply_view.gigungu}</td>
+				</tr>
+				<tr>
 					<th scope="row">이름</th>
-					<td><input type="text" name="bName" value=""></td>
+					<td><input type="text" name="bName" value="<%=name%>"></td>
 				</tr>
 				<tr>
 					<th scope="row">제목</th>
 					<td><input type="text" name="bTitle"
-						value="${reply_view.bTitle} -"></td>
+						value="RE : "></td>
 				</tr>
 				<tr>
 					<th scope="row">원문내용</th>

@@ -13,11 +13,11 @@ import javax.servlet.http.HttpSession;
 import com.study.jsp.command.BCommand;
 import com.study.jsp.command.BContentCommand;
 import com.study.jsp.command.BDeleteCommand;
+import com.study.jsp.command.BDownloadCommand;
 import com.study.jsp.command.BListCommand;
 import com.study.jsp.command.BModifyCommand;
 import com.study.jsp.command.BReplyCommand;
 import com.study.jsp.command.BReplyViewCommand;
-import com.study.jsp.command.BSearchCommand;
 import com.study.jsp.command.BWriteCommand;
 
 @WebServlet("*.do")
@@ -66,6 +66,7 @@ public class FrontController extends HttpServlet {
 			command = new BListCommand();
 			command.execute(request, response);
 			viewPage ="list.jsp";
+
 		}else if(com.equals("/content_view.do")){	//선택한 글 메뉴
 			command = new BContentCommand();
 			command.execute(request, response);
@@ -77,7 +78,7 @@ public class FrontController extends HttpServlet {
 		}else if(com.equals("/modify.do")){		//수정	글 보기
 			command = new BModifyCommand();
 			command.execute(request, response);
-
+			
 			command = new BContentCommand();
 			command.execute(request, response);
 			viewPage = "content_view.jsp";		
@@ -93,16 +94,11 @@ public class FrontController extends HttpServlet {
 			command = new BReplyCommand();
 			command.execute(request, response);
 			viewPage = "list.do?page="+curPage;	
-		}
-		
-			else if(com.equals("/search.do")){	//검색
-
-			command = new BSearchCommand();
+		}else if(com.equals("/download.do")){	//다운로드
+			command = new BDownloadCommand();
 			command.execute(request, response);
-			viewPage = "search.jsp";	
 		}
-		
-	
+
 		RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);
 		dispatcher.forward(request, response);
 	}

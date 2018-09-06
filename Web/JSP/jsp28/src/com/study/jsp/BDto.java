@@ -16,9 +16,13 @@ public class BDto {
 	String food;
 	String sido;
 	String gigungu;
+	String manscore;
+	String sumscore;
+	String avgscore;
+	String upload;
 	
 	public BDto(int bId, String bName, 	String bTitle, String bContent,	Timestamp bDate,
-			int bHit,int bGroup,int bStep,	int bIndent, String food, String sido, String gigungu) {
+			int bHit,int bGroup,int bStep,	int bIndent, String food, String sido, String gigungu,String manscore,String sumscore,String avgscore,String upload) {
 		this.bId=bId;
 		this.bName=bName;
 		this.bTitle=bTitle;
@@ -31,8 +35,44 @@ public class BDto {
 		this.food=food;
 		this.sido=sido;
 		this.gigungu=gigungu;
+		this.manscore=manscore;
+		this.sumscore=sumscore;
+		this.avgscore=avgscore;
+		this.upload=upload;		
 	}
 	
+	public String getUpload() {
+		return upload;
+	}
+
+	public void setUpload(String upload) {
+		this.upload = upload;
+	}
+
+	public String getManscore() {
+		return manscore;
+	}
+
+	public void setManscore(String manscore) {
+		this.manscore = manscore;
+	}
+
+	public String getSumscore() {
+		return sumscore;
+	}
+
+	public void setSumscore(String sumscore) {
+		this.sumscore = sumscore;
+	}
+
+	public String getAvgscore() {
+		return avgscore;
+	}
+
+	public void setAvgscore(String avgscore) {
+		this.avgscore = avgscore;
+	}
+
 	public int getbId() {
 		return bId;
 	}

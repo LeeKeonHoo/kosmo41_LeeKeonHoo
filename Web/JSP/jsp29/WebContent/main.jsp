@@ -19,12 +19,12 @@
 <body>
 
 	<h1><%= name %>님 안녕하세요</h1> <br>
-	<form action="logout.do" method="post">
+	<form action="logout.go" method="post">
 		<input type="submit" value="로그아웃">&nbsp;&nbsp;&nbsp;
 		<input type ="button" value="정보수정"
 				onclick="javascript:window.location='modify.jsp'">&nbsp;&nbsp;&nbsp;
 		<input type ="button" value="게시판"
-				onclick="javascript:window.location='list.jsp'">&nbsp;&nbsp;&nbsp;
+				onclick="javascript:window.location='list.do?page=1'">&nbsp;&nbsp;&nbsp;
 	</form>
 </body>
 </html>

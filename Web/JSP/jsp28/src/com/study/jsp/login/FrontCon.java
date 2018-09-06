@@ -1,4 +1,4 @@
-package com.study.jsp;
+package com.study.jsp.login;
 
 import java.io.IOException;
 import java.io.PrintWriter;

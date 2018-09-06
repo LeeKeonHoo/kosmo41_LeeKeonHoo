@@ -40,7 +40,7 @@
 	crossorigin="anonymous"></script>
 </head>
 <body>
-		<form action="modifyOk.do" method= "post" name = "reg_frm">
+		<form action="modifyOk.go" method= "post" name = "reg_frm">
 
 		<div class="input-group">
 			<div class="input-group-prepend">

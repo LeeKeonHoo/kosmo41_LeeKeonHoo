@@ -50,6 +50,21 @@
 					<td>${content_view.bHit}</td>
 				</tr>
 				<tr>
+					<th scope="row">종류</th>
+					<td><input type="text" name="food"
+						value="${content_view.food}"></td>
+				</tr>
+				<tr>
+					<th scope="row">지역</th>
+					<td><input type="text" name="sido"
+						value="${content_view.sido}"></td>
+				</tr>
+				<tr>
+					<th scope="row">시군구</th>
+					<td><input type="text" name="gigungu"
+						value="${content_view.gigungu}"></td>
+				</tr>
+				<tr>
 					<th scope="row">이름</th>
 					<td><input type="text" name="bName"
 						value="${content_view.bName}"></td>

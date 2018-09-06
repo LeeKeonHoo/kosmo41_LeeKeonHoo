@@ -1,5 +1,15 @@
+<%@ page import ="com.study.jsp.login.MemberDto"  %>
+<%@ page import ="com.study.jsp.login.MemberDao"  %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
+<%
+	request.setCharacterEncoding("UTF-8");
+%>
+<%
+	String id = (String)session.getAttribute("id");
+	MemberDao dao =MemberDao.getInstance();
+	MemberDto dto =dao.getMember(id);
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,14 +40,15 @@
 	crossorigin="anonymous"></script>
 </head>
 <body>
-	<form action="joinOk.go" method="post" name="reg_frm">
+		<form action="modifyOk.go" method= "post" name = "reg_frm">
 
 		<div class="input-group">
 			<div class="input-group-prepend">
 				<span class="input-group-text">아이디</span>
+				<div class="alert alert-danger" role="alert">
+				 <%= dto.getId() %>
+				</div>
 			</div>
-			<input type="text" aria-label="First name" class="form-control"
-				name="id">
 		</div>
 
 		<div class="input-group">
@@ -59,9 +70,10 @@
 		<div class="input-group">
 			<div class="input-group-prepend">
 				<span class="input-group-text">이름</span>
+				<div class="alert alert-danger" role="alert">
+				<%= dto.getName() %>
+				</div>
 			</div>
-			<input type="text" aria-label="First name" class="form-control"
-				name="name">
 		</div>
 
 		<div class="input-group">
@@ -88,11 +100,15 @@
 		</div>
 
 		<button type="button" class="btn btn-outline-primary"
-			onclick="infoConfirm()">회원가입</button>
+			onclick="updateInfoConfirm()">수정</button>
 		<button type="reset" class="btn btn-outline-primary"
-			onclick="javascript:window.location='login.jsp'">로그인</button>
+			onclick="javascript:window.location='list.jsp'">취소</button>
+
+
 
 
 	</form>
+
+
 </body>
 </html>

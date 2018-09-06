@@ -1,6 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <script src="https://cdn.ckeditor.com/4.10.0/standard/ckeditor.js"></script>
+<%
+	if (session.getAttribute("ValidMem") == null) {
+%>
+<jsp:forward page="login.jsp" />
+<%
+	}
+
+	String name = (String) session.getAttribute("name");
+	String id = (String) session.getAttribute("id");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,12 +41,24 @@
 
 </head>
 <body>
-	<form action="write.do" method="post">
+	<form action="write.do" method="post" enctype="multipart/form-data" >
 		<table class="table table-sm">
 			<tbody>
 				<tr>
-					<th scope="row">이름</th>
-					<td><input type="text" name="bName" size="50"></td>
+					<th scope="row">이름</th>			
+					<td><input type="text" name="bName" size="50" value="<%=name%>"></td>
+				</tr>
+				<tr>
+					<th scope="row">종류</th>			
+					<td><input type="text" name="food" size="50"></td>
+				</tr>
+				<tr>
+					<th scope="row">지역</th>			
+					<td><input type="text" name="sido" size="50"></td>
+				</tr>
+				<tr>
+					<th scope="row">시군구</th>			
+					<td><input type="text" name="gigungu" size="50"></td>
 				</tr>
 				<tr>
 					<th scope="row">제목</th>
@@ -49,7 +71,10 @@
 							CKEDITOR.replace('editor1');
 						</script></td>
 				</tr>
-
+					<th scope="row">업로드 파일</th>
+  					<td>
+  					<input type="file" name="filename">
+					</td>
 				<tr>
 					<td><input class="btn btn-primary" type="submit" value="작성">
 						<a class="btn btn-outline-primary" href="list.do" role="button">목록보기</a>

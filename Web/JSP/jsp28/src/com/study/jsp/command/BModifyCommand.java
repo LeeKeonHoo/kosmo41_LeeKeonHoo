@@ -14,9 +14,12 @@ public class BModifyCommand implements BCommand {
 		String bName =request.getParameter("bName");
 		String bTitle =request.getParameter("bTitle");
 		String bContent =request.getParameter("bContent");
+		String food=request.getParameter("food");
+		String sido=request.getParameter("sido");
+		String gigungu=request.getParameter("gigungu");
 		
 		BDao dao = BDao.getInstance();
-		dao.modify(bId, bName, bTitle, bContent);
+		dao.modify(bId, bName, bTitle, bContent,food, sido, gigungu);
 		
 	}
 

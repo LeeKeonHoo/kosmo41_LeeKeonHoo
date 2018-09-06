@@ -15,9 +15,32 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-
+	<script type ="text/javascript">
+		function goBack(){
+			window.history.back();
+		}
+		function onDownload(bId) {
+			var o = document.getElementById("ifrm_filedown");	
+			o.src = "download.do?bId="+bId;
+		}
+		function button_event(bId){
+			if (confirm("정말 삭제하시겠습니까??") == true){    //확인
+				alert("삭제되었습니다");
+				location.replace("delete.do?bId="+bId);
+			}else{   //취소
+			    return;
+			}
+			}
+	</script>
+	
+	<%
+	String name = (String) session.getAttribute("name");
+	String id = (String) session.getAttribute("id");
+	%>
 </head>
 <body>
+<iframe id="ifrm_filedown"  style="position:absolute; z-index:1;visibility : hidden;"></iframe> 
+
 <table class="table table-sm">
   <tbody>
     <tr>
@@ -27,6 +50,18 @@
     <tr>
       <th scope="row">조회수</th>
       <td>${content_view.bHit}</td>
+    </tr>
+    <tr>
+      <th scope="row">종류</th>
+      <td>${content_view.food}</td>
+    </tr>
+    <tr>
+      <th scope="row">지역</th>
+      <td>${content_view.sido}</td>
+    </tr>
+    <tr>
+      <th scope="row">시군구</th>
+      <td>${content_view.gigungu}</td>
     </tr>
     <tr>
       <th scope="row">이름</th>
@@ -40,11 +75,22 @@
       <th scope="row">내용</th>
       <td>${content_view.bContent}</td>
     </tr>
-</tbody>
+		<tr>
+	      <th scope="row">업로드 파일</th>
+			<td>
+			<a href="#" onclick="onDownload('${content_view.bId}')">${content_view.upload}</a>
+
+			</td>
+		</tr>
+
 </table>
+<% if(session.getAttribute("id2").equals("list.do")) { %>
+<% if(session.getAttribute("check").equals("yes")) { %>
 	<a class="btn btn-outline-primary" href="modify_view.do?bId=${content_view.bId}" role="button">수정</a>
+	<a class="btn btn-outline-danger" role="button" onclick="button_event('${content_view.bId}');">삭제</a>
+<% }} %>
 	<a class="btn btn-outline-secondary" href="list.do?page=<%= session.getAttribute("cpage") %>" role="button">목록보기</a>
 	<a class="btn btn-outline-success" href="reply_view.do?bId=${content_view.bId}" role="button">답변</a>
-	<a class="btn btn-outline-danger" href="delete.do?bId=${content_view.bId}" role="button">삭제</a>
+	<a class="btn btn-outline-info" href="javascript:history.back()" role="button" >뒤로가기</a>
 </body>
 </html>
