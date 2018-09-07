@@ -18,6 +18,7 @@ import com.study.jsp.command.BListCommand;
 import com.study.jsp.command.BModifyCommand;
 import com.study.jsp.command.BReplyCommand;
 import com.study.jsp.command.BReplyViewCommand;
+import com.study.jsp.command.BRiviewCommand;
 import com.study.jsp.command.BWriteCommand;
 
 @WebServlet("*.do")
@@ -97,8 +98,15 @@ public class FrontController extends HttpServlet {
 		}else if(com.equals("/download.do")){	//다운로드
 			command = new BDownloadCommand();
 			command.execute(request, response);
-		}
+		}else if(com.equals("/review.do")){	// 평점주기
+			command = new BRiviewCommand();
+			command.execute(request, response);
 
+			command = new BContentCommand();
+			command.execute(request, response);
+			viewPage = "content_view.jsp";
+		}
+		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);
 		dispatcher.forward(request, response);
 	}

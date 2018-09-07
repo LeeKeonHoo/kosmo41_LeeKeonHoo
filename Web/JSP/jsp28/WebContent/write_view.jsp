@@ -46,7 +46,7 @@
 			<tbody>
 				<tr>
 					<th scope="row">이름</th>			
-					<td><input type="text" name="bName" size="50" value="<%=name%>"></td>
+					<td><input type="hidden" name="bName" size="50" value="<%=name%>"><%=name%></td>
 				</tr>
 				<tr>
 					<th scope="row">종류</th>			

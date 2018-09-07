@@ -9,7 +9,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <meta charset="UTF-8">
-
+ 
 <!-- Required meta tags -->
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -30,7 +30,41 @@
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
 	integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 	crossorigin="anonymous"></script>
+	
+    <script src="http://code.jquery.com/jquery.js"></script>
+    
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+	<meta name="google-signin-client_id" content="105485682983-u7954einnd0lb8ersmkfj79v1r0tiqk2.apps.googleusercontent.com">
 
+	<script>
+	function onSignIn(googleUser) {
+		var profile = googleUser.getBasicProfile();
+		console.log('ID: ' + profile.getId());
+		console.log('Name: ' + profile.getName());
+		console.log('Image URL: ' + profile.getImageUrl());
+		console.log('Email: ' + profile.getEmail());
+
+		$('#login').css('display', 'none');
+    	$('#logout').css('display', 'block');
+    	$('#upic').attr('src', profile.getImageUrl());
+    	$('#uname').html('[ ' +profile.getName() + ' ]');
+    	
+		location.replace("google.go?bId="+bId);
+
+	}
+	function signOut() {
+	    var auth2 = gapi.auth2.getAuthInstance();
+	    auth2.signOut().then(function () {
+	    	console.log('User signed out.');
+	    
+	    	$('#login').css('display', 'block');
+	    	$('#logout').css('display', 'none');
+	    	$('#upic').attr('src', '');
+	    	$('#uname').html('');
+	    });
+	}
+	
+	</script>
 </head>
  <body class="text-center">
     <form class="form-signin" action = "loginOk.go" method ="post">
@@ -54,6 +88,24 @@
       <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
       <button class="btn btn-lg btn-primary btn-block" type="submit" onclick="javascript:window.location='join.jsp'">Sign up</button>
       <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
+      
+         <div id="my-signin2"></div>
+
+    <div id="logout" style="display: none;">
+    <input type="button" onclick="signOut();" value="로그아웃" /><br>
+
+    <img id="upic" src=""><br>
+    <span id="uname"></span>
+    </div>
+
+  <div id="login" class="g-signin2" data-onsuccess="onSignIn"></div>
+
+<div id="logout" style="display: none;">
+    <input type="button" onclick="signOut();" value="로그아웃" /><br>
+
+    <img id="upic" src=""><br>
+    <span id="uname"></span>
+</div>
     </form>
 
 

@@ -47,10 +47,10 @@
 </script>
 <body>
 	<form action="reply.do" method="post">
-		<input type="hidden" name="bId" value="${reply_view.bId}"> <input
-			type="hidden" name="bGroup" value="${reply_view.bGroup}"> <input
-			type="hidden" name="bStep" value="${reply_view.bStep}"> <input
-			type="hidden" name="bIndent" value="${reply_view.bIndent}">
+		<input type="hidden" name="bId" value="${reply_view.bId}">
+		<input type="hidden" name="bGroup" value="${reply_view.bGroup}">
+		<input type="hidden" name="bStep" value="${reply_view.bStep}">
+		<input type="hidden" name="bIndent" value="${reply_view.bIndent}">
 		<table class="table table-sm">
 			<tbody>
 				<tr>
@@ -75,7 +75,7 @@
 				</tr>
 				<tr>
 					<th scope="row">이름</th>
-					<td><input type="text" name="bName" value="<%=name%>"></td>
+					<td><input type="hidden" name="bName" value="<%=name%>"><%=name%></td>
 				</tr>
 				<tr>
 					<th scope="row">제목</th>

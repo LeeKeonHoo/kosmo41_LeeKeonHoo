@@ -29,7 +29,7 @@
 				location.replace("delete.do?bId="+bId);
 			}else{   //취소
 			    return;
-			}
+			}		
 			}
 	</script>
 	
@@ -44,7 +44,7 @@
 <table class="table table-sm">
   <tbody>
     <tr>
-      <th scope="row">번호</th>
+      <th scope="row" name="bId">번호</th>
       <td>${content_view.bId}</td>
     </tr>
     <tr>
@@ -64,6 +64,14 @@
       <td>${content_view.gigungu}</td>
     </tr>
     <tr>
+      <th scope="row">리뷰인원</th>
+      <td>${content_view.manscore}</td>
+    </tr>
+    <tr>
+      <th scope="row">평점</th>
+      <td>${content_view.avgscore}</td>
+    </tr>
+    <tr>
       <th scope="row">이름</th>
       <td>${content_view.bName}</td>
     </tr>
@@ -75,13 +83,29 @@
       <th scope="row">내용</th>
       <td>${content_view.bContent}</td>
     </tr>
-		<tr>
-	      <th scope="row">업로드 파일</th>
-			<td>
-			<a href="#" onclick="onDownload('${content_view.bId}')">${content_view.upload}</a>
-
-			</td>
-		</tr>
+	<tr>
+      <th scope="row">업로드 파일</th>
+		<td>
+		<a href="#" onclick="onDownload('${content_view.bId}')">${content_view.upload}</a>
+		</td>
+	</tr>
+	<tr>
+      <th scope="row">당신의 점수가 개발에 큰 도움이 됩니다</th>
+		<td>
+		<form action ="review.do" method="post">
+		<input type = "hidden" name = "bId" value="${content_view.bId}">
+			<select class="custom-select" name="sumscore">
+				<option selected value="1">1점</option>
+				<option value="2">2점</option>
+				<option value="3">3점</option>
+				<option value="4">4점</option>
+				<option value="5">5점</option>
+			</select>
+		<button class="btn btn-outline-info" role="submit" >평점주기</button>
+		</form>
+		</td> 
+	</tr>
+ 
 
 </table>
 <% if(session.getAttribute("id2").equals("list.do")) { %>

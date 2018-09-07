@@ -66,8 +66,8 @@
 				</tr>
 				<tr>
 					<th scope="row">이름</th>
-					<td><input type="text" name="bName"
-						value="${content_view.bName}"></td>
+					<td><input type="hidden" name="bName"
+						value="${content_view.bName}">${content_view.bName}</td>
 				</tr>
 				<tr>
 					<th scope="row">제목</th>

@@ -52,6 +52,10 @@ public class FrontCon extends HttpServlet {
 			
 		}else if(command.equals("/logout.go")) {
 			logoutOk(request,response);
+		
+		}else if(command.equals("/google.go")) {
+			Service service = new googleOk();
+			service.execute(request, response);
 	}
 	}
 

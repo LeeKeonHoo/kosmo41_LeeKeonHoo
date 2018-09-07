@@ -595,7 +595,35 @@ public class BDao {
 		}
 	}
 	
+	public BDto riview(String bId,String sumscore) {	//점수주기
 
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		
+		
+		String query =  " update mvc_board set " +
+						" avgscore = round(((sumscore+"+sumscore+")/(manscore+1)), 2), " +
+						" manscore = (manscore+1), " +
+						" sumscore = (sumscore+"+sumscore+") " +
+						" where bid = '"+bId+"' " ;
+						
+
+		try {
+			con = dataSource.getConnection();
+			pstmt = con.prepareStatement(query);
+			int rn = pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (pstmt != null)	pstmt.close();
+				if (con != null)	con.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return null;
+	}
 	
 	
 }

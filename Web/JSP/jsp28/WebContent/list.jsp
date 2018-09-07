@@ -69,6 +69,7 @@
 				<th scope="col">종류</th>
 				<th scope="col">지역</th>
 				<th scope="col">시군구</th>				
+				<th scope="col">평점</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -83,11 +84,32 @@
 					<td>${dto.food }</td>
 					<td>${dto.sido }</td>
 					<td>${dto.gigungu }</td>
+					<td>${dto.avgscore }</td>
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
+	
+	
 	<a class="btn btn-outline-primary" href="write_view.do" role="button">글작성</a>
+	
+		<form action ="list.do" method="post">
+		<input type = "hidden" name = "search" value="<%=id%>">
+		<input type = "hidden" name = "option" value="2">
+		<button class="btn btn-outline-info" role="submit" >자기글 보기</button>
+		</form>
+		
+		<form action ="list.do" method="post">
+		<input type = "hidden" name = "search" value="">
+		<input type = "hidden" name = "option" value="1">
+		<button class="btn btn-outline-info" role="submit" >전체글 보기</button>
+		</form>
+	
+<!-- 		<form action ="list.do" method="post">
+		<input type = "hidden" name = "star" value="1">
+		<button class="btn btn-outline-info" role="submit" >즐겨찾기</button>
+		</form> -->
+		
 	<form action=list.do method="post">
 		<div class="input-group mb-3">
 			<select class="custom-select" id="option" name="option">
