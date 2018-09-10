@@ -1,5 +1,7 @@
 package com.study.jsp.command;
 
+import java.io.UnsupportedEncodingException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -11,15 +13,14 @@ public class BWriteCommand implements BCommand {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
+
 		
-		
-//		  request.setCharacterEncoding("euc-kr");		
 		  MultipartRequest multi = null;	
 
 		  	int sizeLimit = 10 * 1024 * 1024 ; // 10메가입니다.
 		  	String savePath = request.getSession().getServletContext().getRealPath("/upload");    // 파일이 업로드될 실제 tomcat 폴더의 WebContent 기준
 		  	try{
-		  		multi=new MultipartRequest(request, savePath, sizeLimit, "euc-kr", new DefaultFileRenamePolicy()); 
+		  		multi=new MultipartRequest(request, savePath, sizeLimit, "UTF-8", new DefaultFileRenamePolicy()); 
 		  	}catch (Exception e) {
 		  		e.printStackTrace();
 		  	} 

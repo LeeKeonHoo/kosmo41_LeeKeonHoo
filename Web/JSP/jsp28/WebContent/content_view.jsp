@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" 
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,6 +32,8 @@
 			}		
 			}
 	</script>
+	
+	
 	
 	<%
 	String name = (String) session.getAttribute("name");
@@ -101,7 +103,7 @@
 				<option value="4">4점</option>
 				<option value="5">5점</option>
 			</select>
-		<button class="btn btn-outline-info" role="submit" >평점주기</button>
+  		<button class="btn btn-outline-info" role="submit" >평점주기</button>
 		</form>
 		</td> 
 	</tr>

@@ -31,6 +31,13 @@
 	integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 	crossorigin="anonymous"></script>
 
+ <!-- ----------------------------------------------------- -->
+ 
+
+
+ <!-- ----------------------------------------------------- -->
+
+
 </head>
  <body class="text-center">
     <form class="form-signin" action = "loginOk.go" method ="post">
@@ -55,6 +62,14 @@
       <button class="btn btn-lg btn-primary btn-block" type="submit" onclick="javascript:window.location='join.jsp'">Sign up</button>
       <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
     </form>
+
+
+ <!-- ----------------------------------------------------- -->
+
+
+
+ <!-- ----------------------------------------------------- -->
+
 
  </body>
 </html>

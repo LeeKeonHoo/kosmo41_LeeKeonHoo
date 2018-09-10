@@ -39,8 +39,7 @@
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
 	integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 	crossorigin="anonymous"></script>
-
-
+	
 </head>
 <body>
 	<table class="table table-hover table-hover">
@@ -54,21 +53,23 @@
 				</button>
 			</div>
 			<form action="logout.go" method="post">
-				<input type="submit" value="로그아웃">&nbsp;&nbsp;&nbsp; <input
-					type="button" value="정보수정"
+				<input type="submit" value="로그아웃">&nbsp;&nbsp;&nbsp;
+				<input type="button" value="정보수정"
 					onclick="javascript:window.location='modify.jsp'">&nbsp;&nbsp;&nbsp;
+				<input type="button" value="채팅"
+					onclick="javascript:window.location='client.jsp'">&nbsp;&nbsp;&nbsp;
+				
 			</form>
-
 
 			<tr>
 				<th scope="col">번호</th>
 				<th scope="col">이름</th>
 				<th scope="col">제목</th>
-				<th scope="col">날짜</th>
-				<th scope="col">조회수</th>
 				<th scope="col">종류</th>
 				<th scope="col">지역</th>
 				<th scope="col">시군구</th>				
+				<th scope="col">날짜</th>
+				<th scope="col">조회수</th>
 				<th scope="col">평점</th>
 			</tr>
 		</thead>
@@ -79,56 +80,58 @@
 					<td>${dto.bName}</td>
 					<td><c:forEach begin="1" end="${dto.bIndent}">&nbsp;&nbsp;&nbsp;</c:forEach> <a
 						href="content_view.do?bId=${dto.bId}">${dto.bTitle}</a></td>
-					<td>${dto.bDate}</td>
-					<td>${dto.bHit}</td>
 					<td>${dto.food }</td>
 					<td>${dto.sido }</td>
 					<td>${dto.gigungu }</td>
+					<td>${dto.bDate}</td>
+					<td>${dto.bHit}</td>
 					<td>${dto.avgscore }</td>
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
 	
-	
-	<a class="btn btn-outline-primary" href="write_view.do" role="button">글작성</a>
-	
+	<table>
+	<tr>
+	<td><a class="btn btn-outline-primary" href="write_view.do" role="button">글작성</a></td>
+
 		<form action ="list.do" method="post">
 		<input type = "hidden" name = "search" value="<%=id%>">
 		<input type = "hidden" name = "option" value="2">
-		<button class="btn btn-outline-info" role="submit" >자기글 보기</button>
+	<td><button class="btn btn-outline-info" role="submit" >자기글 보기</button></td>
 		</form>
-		
+	
+		<form action ="list.do" method="post">
+		<input type = "hidden" name = "search" value="">
+		<input type = "hidden" name = "option" value="0">
+	<td><button class="btn btn-outline-info" role="submit" >평점 순위</button></td>
+		</form>
+
 		<form action ="list.do" method="post">
 		<input type = "hidden" name = "search" value="">
 		<input type = "hidden" name = "option" value="1">
-		<button class="btn btn-outline-info" role="submit" >전체글 보기</button>
+	<td><button class="btn btn-outline-info" role="submit" >전체글 보기</button></td>
 		</form>
-	
-<!-- 		<form action ="list.do" method="post">
-		<input type = "hidden" name = "star" value="1">
-		<button class="btn btn-outline-info" role="submit" >즐겨찾기</button>
-		</form> -->
 		
 	<form action=list.do method="post">
 		<div class="input-group mb-3">
-			<select class="custom-select" id="option" name="option">
+		<td colspan="2"><select class="custom-select" id="option" name="option">
 				<option selected value="1">제목</option>
 				<option value="2">작성자</option>
 				<option value="3">종류</option>
 				<option value="4">지역</option>
 				<option value="5">시군구</option>
-			</select>
+			</select></td>
 		</div>
 		<form class="form-inline mt-2 mt-md-0">
-			<input class="form-control mr-sm-2" type="text" placeholder="Search"
-				aria-label="Search" name="search">
-			<button class="btn btn-outline-success my-2 my-sm-0" type="submit"
-				>Search</button>
+			<td colspan="2"><input class="form-control mr-sm-2" type="text" placeholder="Search"
+				aria-label="Search" name="search"></td>
+		<td colspan="2"><button class="btn btn-outline-success my-2 my-sm-0" type="submit"
+				>Search</button></td>
 		</form>
 	</form>
-
-
+	</tr>
+	</table>
 
 	<div class="btn-toolbar" role="toolbar"
 		aria-label="Toolbar with button groups">

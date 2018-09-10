@@ -1,5 +1,7 @@
 package com.study.jsp;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -7,6 +9,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 
@@ -18,7 +21,8 @@ public class BDao {
 	DataSource dataSource = null;
 	int listCount =10;	//한 페이지당 보여줄 게시물의 개수
 	int pageCount =10;	//하단에 보여줄 페이지 리스트의 개수
-
+	int avgsumg =0;
+	
 	private BDao() {
 		try {
 			// lookup함수의 파라메터는 context.xml에 설정된
@@ -102,6 +106,23 @@ public class BDao {
 						  "	        select * " +
 						  "	          from mvc_board " +
 						  "	         order by bgroup desc, bstep asc ) A " +
+						  "	    where rownum <= ? ) B " +
+						  "	where B.num >= ? ";
+
+			pstmt=con.prepareStatement(query);
+			pstmt.setInt(1, nEnd);
+			pstmt.setInt(2, nStart);
+			}
+			else if(option.equals("0")) {
+			String query ="select * " +
+					  	  "  from ( " +
+						  "	   select rownum num, A.* " +
+						  "	     from ( " +
+						  "	        select * " +
+						  "	          from mvc_board " +
+						  "             where avgscore>0 " +
+						  "             order by avgscore desc, " +
+						  "	         bgroup desc, bstep asc ) A " +
 						  "	    where rownum <= ? ) B " +
 						  "	where B.num >= ? ";
 
@@ -194,6 +215,7 @@ public class BDao {
 						  "	    where rownum <= ? ) B " +
 						  "	where B.num >= ? ";
 
+				
 			pstmt=con.prepareStatement(query);
 			pstmt.setString(1, "%"+search+"%");
 			pstmt.setInt(2, nEnd);
@@ -254,6 +276,10 @@ public class BDao {
 			}
 			else if(option.equals("")) {
 				String query = "select count(*) as total from mvc_board";
+				pstmt = con.prepareStatement(query);				
+			}
+			else if(option.equals("0")) {
+				String query = "select count(*) as total from mvc_board where avgscore>0 ";
 				pstmt = con.prepareStatement(query);				
 			}
 			else if(option.equals("1")) {
@@ -595,19 +621,18 @@ public class BDao {
 		}
 	}
 	
-	public BDto riview(String bId,String sumscore) {	//점수주기
+	public BDto riview(String bId,String sumscore,HttpServletResponse response) {	//점수주기
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
-		
-		
+			
+		if(avgsumg == 0) {	
+			
 		String query =  " update mvc_board set " +
 						" avgscore = round(((sumscore+"+sumscore+")/(manscore+1)), 2), " +
 						" manscore = (manscore+1), " +
 						" sumscore = (sumscore+"+sumscore+") " +
 						" where bid = '"+bId+"' " ;
-						
-
 		try {
 			con = dataSource.getConnection();
 			pstmt = con.prepareStatement(query);
@@ -622,7 +647,25 @@ public class BDao {
 				e2.printStackTrace();
 			}
 		}
+		avgsumg++;
+
+		}else{
+			try {
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter writer = response.getWriter();
+				writer.println("<script language='javascript'>");
+				writer.println("alert('이미 평점을 등록하셨습니다.');");
+				writer.println("location.href=history.back()");
+				writer.println("</script>");
+				writer.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		avgsumg--;
+		}
+				
 		return null;
+		
 	}
 	
 	

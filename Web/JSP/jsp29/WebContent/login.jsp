@@ -66,54 +66,10 @@
 	
 	</script>
 </head>
- <body class="text-center">
-    <form class="form-signin" action = "loginOk.go" method ="post">
-      <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-      
-      <label for="inputEmail" class="sr-only">Email address</label>
-      <input type="text" id="inputEmail" name="id" class="form-control" placeholder="Email address" required autofocus
-      				value="<% if(session.getAttribute("id") != null)
-								out.println(session.getAttribute("id"));
-								%>">
-      <label for="inputPassword" class="sr-only">Password</label>
-      <input type="password" id="inputPassword"  name ="pw" class="form-control" placeholder="Password" required>
-   
-      <div class="checkbox mb-3">
-        <label>
-          <input type="checkbox" value="remember-me"> Remember me
-        </label>
-      </div>
-      
-      
-      <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-      <button class="btn btn-lg btn-primary btn-block" type="submit" onclick="javascript:window.location='join.jsp'">Sign up</button>
-      <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
-      
-         <div id="my-signin2"></div>
+ <body>
+ 
 
-    <div id="logout" style="display: none;">
-    <input type="button" onclick="signOut();" value="로그아웃" /><br>
-
-    <img id="upic" src=""><br>
-    <span id="uname"></span>
-    </div>
-
-  <div id="login" class="g-signin2" data-onsuccess="onSignIn"></div>
-
-<div id="logout" style="display: none;">
-    <input type="button" onclick="signOut();" value="로그아웃" /><br>
-
-    <img id="upic" src=""><br>
-    <span id="uname"></span>
-</div>
-    </form>
-
-
-
-
-
-
-<%-- 	<form action = "loginOk.do" method ="post" >
+ 	<form action = "loginOk.do" method ="post" >
 		아이디 : <input type ="text" name="id"
 							value="<% if(session.getAttribute("id") != null)
 								out.println(session.getAttribute("id"));
@@ -123,6 +79,6 @@
 		<input type ="submit" value="로그인">&nbsp;&nbsp;
 		<input type ="button" value="회원가입" onclick="javascript:window.location='join.jsp'">
 	</form>
- --%>
+
  </body>
 </html>

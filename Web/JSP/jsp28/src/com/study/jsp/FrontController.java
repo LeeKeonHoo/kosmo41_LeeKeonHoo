@@ -40,7 +40,8 @@ public class FrontController extends HttpServlet {
 	protected void actionDo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		request.setCharacterEncoding("UTF-8");
-		
+		response.setContentType("text/html;charset=UTF-8");
+
 		String viewPage =null;
 		BCommand command = null;
 				

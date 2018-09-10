@@ -16,7 +16,7 @@ public class BRiviewCommand implements BCommand {
 		System.out.println(bId);
 		System.out.println(sumscore);
 		BDao dao = BDao.getInstance();
-		BDto dto = dao.riview(bId,sumscore);
+		BDto dto = dao.riview(bId,sumscore,response);
 		
 	}
 
