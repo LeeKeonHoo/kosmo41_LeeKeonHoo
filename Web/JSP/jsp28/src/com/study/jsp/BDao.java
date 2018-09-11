@@ -7,13 +7,10 @@ import java.util.ArrayList;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
-
-import org.apache.catalina.connector.Request;
 
 public class BDao {
 
@@ -21,7 +18,6 @@ public class BDao {
 	DataSource dataSource = null;
 	int listCount =10;	//한 페이지당 보여줄 게시물의 개수
 	int pageCount =10;	//하단에 보여줄 페이지 리스트의 개수
-	int avgsumg =0;
 	
 	private BDao() {
 		try {
@@ -38,7 +34,7 @@ public class BDao {
 		return instance;
 	}
 
-	public void write(String bName,String bTitle,String bContent,String filename,String food, String sido, String gigungu) {			//작성
+	public void write(String bName,String bTitle,String bContent,String filename,String food, String sido, String gigungu) {
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -69,13 +65,16 @@ public class BDao {
 			}
 		}
 	}
+	//작성하기
 	
-	public ArrayList<BDto> list(int curPage, String search, String option){		//목록 10개씩 분리
+	public ArrayList<BDto> list(int curPage, String search, String option,HttpServletRequest request){
 		
 		ArrayList<BDto> dtos = new ArrayList<BDto>();
 		Connection con =null;
 		PreparedStatement pstmt =null;
 		ResultSet resultSet = null;
+		HttpSession session = request.getSession();
+		String sid = (String)session.getAttribute("id");
 		
 		int nStart = (curPage -1) * listCount + 1;
 		int nEnd = (curPage -1) * listCount + listCount;
@@ -221,6 +220,24 @@ public class BDao {
 			pstmt.setInt(2, nEnd);
 			pstmt.setInt(3, nStart);
 			}
+			else if(option.equals("6")) {
+			String query ="select * " +
+					  	  "  from ( " +
+						  "	   select rownum num, A.* " +
+						  "	     from ( " +
+						  "	        select * " +
+						  "	          from mvc_board " +
+						  "             where star2 = '"+sid+"' " +
+						  "	         order by bgroup desc, bstep asc ) A " +
+						  "	    where rownum <= ? ) B " +
+						  "	where B.num >= ? ";
+
+			pstmt=con.prepareStatement(query);
+			pstmt.setInt(1, nEnd);
+			pstmt.setInt(2, nStart);
+			}
+			
+			
 			resultSet = pstmt.executeQuery();
 			
 			while(resultSet.next()) {
@@ -258,11 +275,14 @@ public class BDao {
 		}
 		return dtos;
 	}
+	//리스트
 
-	public BPageInfo articlePage(int curPage, String search, String option) {
+	public BPageInfo articlePage(int curPage, String search, String option,HttpServletRequest request) {
 		Connection con =null;
 		PreparedStatement pstmt =null;
 		ResultSet resultSet = null;
+		HttpSession session = request.getSession();
+		String sid = (String)session.getAttribute("id");
 		
 		
 		int totalCount = 0;	//총 게시물의 갯수
@@ -306,6 +326,10 @@ public class BDao {
 				String query = "select count(*) as total from mvc_board where gigungu like ?";
 				pstmt = con.prepareStatement(query);
 				pstmt.setString(1, "%"+search+"%");				
+			}
+			else if(option.equals("6")) {
+				String query = "select count(*) as total from mvc_board where star = '"+sid+"' ";
+				pstmt = con.prepareStatement(query);				
 			}
 
 			resultSet = pstmt.executeQuery();
@@ -357,8 +381,9 @@ public class BDao {
 		
 		return pinfo;
 	}
+	//리스트 목록 10개씩 분리
 	
-	public BDto contentView(String strId,HttpServletRequest request) {	//작성글 보기
+	public BDto contentView(String strId,HttpServletRequest request) {
 		upHit(strId);
 		
 		BDto dto =null;
@@ -422,8 +447,9 @@ public class BDao {
 		}
 		return dto;
 	}
+	//작성글 보기
 	
-	public void modify(String bId, String bName,String bTitle,String bContent, String food, String sido, String gigungu) {	//수정
+	public void modify(String bId, String bName,String bTitle,String bContent, String food, String sido, String gigungu) {
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -459,8 +485,9 @@ public class BDao {
 			}
 		}
 	}
+	//수정하기
 	
-	private void upHit(String bId) {	//조회수
+	private void upHit(String bId) {
 
 		Connection con =null;
 		PreparedStatement pstmt =null;
@@ -484,8 +511,9 @@ public class BDao {
 			}		
 		}
 	}
+	//조회수
 	
-	public void delete(String bId) {	//삭제
+	public void delete(String bId) {
 
 		Connection con =null;
 		PreparedStatement pstmt =null;
@@ -508,8 +536,9 @@ public class BDao {
 			}		
 		}
 	}
+	//삭제
 	
-	public BDto reply_view(String str) {	//답변보기
+	public BDto reply_view(String str) {
 		
 		BDto dto =null;
 		Connection con =null;
@@ -559,6 +588,7 @@ public class BDao {
 		}
 		return dto;
 	}
+	//답변달기
 	
 	public void reply(String bId, String bName, String bTitle, String bContent,
 					String bGroup, String bStep, String bIndent) {	//답변하기
@@ -594,6 +624,7 @@ public class BDao {
 			}		
 		}
 	}
+	//답변 수정하기
 
 	private void replyShape(String strGroup, String strStep) {
 		Connection con =null;
@@ -620,23 +651,26 @@ public class BDao {
 			}		
 		}
 	}
+	//답변 글 아래 생성
 	
-	public BDto riview(String bId,String sumscore,HttpServletResponse response) {	//점수주기
+	public BDto riview(String bId,String sumscore,HttpServletRequest request, HttpServletResponse response) {
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
+		HttpSession session = request.getSession();
+		String sid = (String)session.getAttribute("id");
+
+		int rn = 0;
+		if(true) {	//여기서 글-닉네임 중복 확인
 			
-		if(avgsumg == 0) {	
-			
-		String query =  " update mvc_board set " +
-						" avgscore = round(((sumscore+"+sumscore+")/(manscore+1)), 2), " +
-						" manscore = (manscore+1), " +
-						" sumscore = (sumscore+"+sumscore+") " +
-						" where bid = '"+bId+"' " ;
+		String query =  " select * from mvc_board " +
+						" where bid = '" + bId + "' and " +
+						" scoreman like '%" + sid + "%' ";
 		try {
 			con = dataSource.getConnection();
 			pstmt = con.prepareStatement(query);
-			int rn = pstmt.executeUpdate();
+			rn = pstmt.executeUpdate();
+			System.out.println(rn +"출력1");
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -647,10 +681,56 @@ public class BDao {
 				e2.printStackTrace();
 			}
 		}
-		avgsumg++;
 
-		}else{
+		}if(rn == 0) {	//없을시 점수 주기(scoreman2에 아이디 저장)
+			
+		String query =  " update mvc_board set " +
+						" avgscore = round(((sumscore+"+sumscore+")/(manscore+1)), 2), " +
+						" manscore = (manscore+1), " +
+						" sumscore = (sumscore+"+sumscore+"), " +
+						" scoreman2 = '" + sid + "' " +
+						" where bid = '"+bId+"' " ;
+		try {
+			con = dataSource.getConnection();
+			pstmt = con.prepareStatement(query);
+			int rn2 = pstmt.executeUpdate();
+			System.out.println(rn2 +"출력2");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
 			try {
+				if (pstmt != null)	pstmt.close();
+				if (con != null)	con.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		
+		}if(rn == 0) {	//없을시 scoreman에 데이터 합치기
+			
+		String query2 =  " update mvc_board set " +
+				" scoreman = (SELECT scoreman||','||scoreman2 TOTAL " +
+				" FROM mvc_board where bid = '"+bId+"') " +
+				" where bid = '"+bId+"' " ;
+		try {
+			con = dataSource.getConnection();
+			pstmt = con.prepareStatement(query2);
+			int rn2 = pstmt.executeUpdate();
+			System.out.println(rn2 +"출력3");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (pstmt != null)	pstmt.close();
+				if (con != null)	con.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		
+		}else if(rn > 0){	//이미 등록햇을시
+			try {
+				System.out.println(rn+"출력4");
 				response.setContentType("text/html; charset=UTF-8");
 				PrintWriter writer = response.getWriter();
 				writer.println("<script language='javascript'>");
@@ -661,12 +741,142 @@ public class BDao {
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-		avgsumg--;
 		}
 				
 		return null;
 		
 	}
+	//점수주기
+	
+	public BDto star(String bId,HttpServletRequest request, HttpServletResponse response) {
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		HttpSession session = request.getSession();
+		String sid = (String)session.getAttribute("id");
+		int rn = 0;
+		if(true) {	//여기서 글-닉네임 중복 확인
+			
+		String query =  " select * from mvc_board " +
+						" where bid = '"+bId+"' and " +
+						" star like '%" + sid + "%' ";
+		try {
+			con = dataSource.getConnection();
+			pstmt = con.prepareStatement(query);
+			rn = pstmt.executeUpdate();
+			System.out.println(rn +"출력1");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (pstmt != null)	pstmt.close();
+				if (con != null)	con.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+
+		}if(rn == 0) {	//없을시 점수 주기(star2에 아이디 저장)
+			
+		String query =  " update mvc_board set " +
+						" star2 = '" + sid + ",' " +
+						" where bid = '"+bId+"' " ;
+		try {
+			con = dataSource.getConnection();
+			pstmt = con.prepareStatement(query);
+			int rn2 = pstmt.executeUpdate();
+			System.out.println(rn2 +"출력2");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (pstmt != null)	pstmt.close();
+				if (con != null)	con.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		
+		}if(rn == 0) {	//없을시 star에 데이터 합치기
+			
+		String query2 =  " update mvc_board set " +
+				" star = (SELECT star||''||star2 TOTAL " +
+				" FROM mvc_board where bid = '"+bId+"') " +
+				" where bid = '"+bId+"' " ;
+		try {
+			con = dataSource.getConnection();
+			pstmt = con.prepareStatement(query2);
+			int rn2 = pstmt.executeUpdate();
+			System.out.println(rn2 +"출력3");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (pstmt != null)	pstmt.close();
+				if (con != null)	con.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+
+		}else if(rn > 0){	//이미 등록햇을시
+			try {
+				System.out.println(rn+"출력4");
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter writer = response.getWriter();
+				writer.println("<script language='javascript'>");
+				writer.println("alert('이미 즐겨찾기에 등록되어 있습니다.');");
+				writer.println("location.href=history.back()");
+				writer.println("</script>");
+				writer.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+			
+		return null;
+		
+	}
+	//즐겨찾기 추가
+	
+	public BDto stardel(String bId,HttpServletRequest request, HttpServletResponse response) {
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		HttpSession session = request.getSession();
+		String sid = (String)session.getAttribute("id");
+		int rn = 0;
+			
+		String query =  " update mvc_board set " +
+						" star = replace(star,'"+sid+",','') " +
+						" where bid = '"+bId+"' ";
+		try {
+			con = dataSource.getConnection();
+			pstmt = con.prepareStatement(query);
+			rn = pstmt.executeUpdate();
+			System.out.println(rn +"출력1");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				response.setContentType("text/html; charset=UTF-8");
+				PrintWriter writer = response.getWriter();
+				writer.println("<script language='javascript'>");
+				writer.println("alert('즐겨찾기에 삭제했습니다.');");
+				writer.println("location.href=history.back()");
+				writer.println("</script>");
+				writer.close();
+
+				if (pstmt != null)	pstmt.close();
+				if (con != null)	con.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}				
+		return null;
+	}
+	//즐겨찾기 삭제
+	
 	
 	
 }

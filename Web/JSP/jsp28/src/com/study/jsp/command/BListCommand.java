@@ -26,7 +26,7 @@ public class BListCommand implements BCommand {
 		}
 		
 		BDao dao = BDao.getInstance();
-		BPageInfo pinfo = dao.articlePage(nPage,search, option);
+		BPageInfo pinfo = dao.articlePage(nPage,search, option,request);
 		request.setAttribute("page", pinfo);
 		request.setAttribute("search", search);
 		request.setAttribute("option", option);
@@ -40,7 +40,7 @@ public class BListCommand implements BCommand {
 		session.setAttribute("option", option);
 
 		
-		ArrayList<BDto> dtos = dao.list(nPage, search, option);
+		ArrayList<BDto> dtos = dao.list(nPage, search, option,request);
 		request.setAttribute("list", dtos);
 		
 		

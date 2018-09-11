@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,7 +19,6 @@ public class BDownloadCommand implements BCommand {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
 
-//		request.setCharacterEncoding("euc-kr");
 		String bId =request.getParameter("bId");
 		BDao dao = BDao.getInstance();
 		BDto dto = dao.contentView(bId, request);
@@ -37,12 +37,10 @@ public class BDownloadCommand implements BCommand {
 				response.setContentLength((int)filesize);
 				String strClient = request.getHeader("user-agent");
 
-				if(strClient.indexOf("MSIE 5.5")!=-1)
-				{
+				if(strClient.indexOf("MSIE 5.5")!=-1){
 					response.setHeader("Content-Disposition", "filename=" + filename + ";" );
-				}
-				else 
-				{
+				}else{
+					filename = URLEncoder.encode(filename,"UTF-8").replaceAll("\\+", "%20");
 					response.setHeader("Content-Disposition", "attachment; filename=" + filename + ";" );
 				}
 
@@ -58,26 +56,18 @@ public class BDownloadCommand implements BCommand {
 
 				int read = 0;
 
-				while((read=fin.read(b)) != -1)
-				{
+				while((read=fin.read(b)) != -1) {
 					outs.write(b, 0, read);
 				}
 				outs.flush();
 				outs.close();
 				fin.close();
-
-			} catch(Exception e)
-			{
+			} catch(Exception e){
 				System.out.println("Download Exception : " + e.getMessage());
 			}
-		}		else
-		{
+		}else{
 			System.out.println("Download Error : downFile Error [" + downFile + "]");
 		}
-
 		return;
-
-
-
 	}
 }

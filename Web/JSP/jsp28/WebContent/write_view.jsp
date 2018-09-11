@@ -181,7 +181,7 @@
 				<td><input type="file" name="filename"></td>
 				<tr>
 					<td><input class="btn btn-primary" type="submit" value="작성">
-						<a class="btn btn-outline-primary" href="list.do" role="button">목록보기</a>
+						<a class="btn btn-outline-primary" href="list.do" role="button">취소</a>
 					</td>
 				</tr>
 			</tbody>

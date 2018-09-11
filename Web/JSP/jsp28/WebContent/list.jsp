@@ -78,8 +78,9 @@
 				<tr>
 					<th scope="row">${dto.bId}</th>
 					<td>${dto.bName}</td>
-					<td><c:forEach begin="1" end="${dto.bIndent}">&nbsp;&nbsp;&nbsp;</c:forEach> <a
-						href="content_view.do?bId=${dto.bId}">${dto.bTitle}</a></td>
+					<td style="max-width: 150px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+					<c:forEach begin="1" end="${dto.bIndent}">&nbsp;&nbsp;&nbsp;</c:forEach>
+					<a href="content_view.do?bId=${dto.bId}">${dto.bTitle}</a></td>
 					<td>${dto.food }</td>
 					<td>${dto.sido }</td>
 					<td>${dto.gigungu }</td>
@@ -111,6 +112,12 @@
 		<input type = "hidden" name = "search" value="">
 		<input type = "hidden" name = "option" value="1">
 	<td><button class="btn btn-outline-info" role="submit" >전체글 보기</button></td>
+		</form>
+		
+		<form action ="list.do" method="post">
+		<input type = "hidden" name = "search" value="">
+		<input type = "hidden" name = "option" value="6">
+	<td><button class="btn btn-outline-info" role="submit" >즐겨찾기</button></td>
 		</form>
 		
 	<form action=list.do method="post">

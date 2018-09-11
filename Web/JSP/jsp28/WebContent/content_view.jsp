@@ -118,5 +118,8 @@
 	<a class="btn btn-outline-secondary" href="list.do?page=<%= session.getAttribute("cpage") %>" role="button">목록보기</a>
 	<a class="btn btn-outline-success" href="reply_view.do?bId=${content_view.bId}" role="button">답변</a>
 	<a class="btn btn-outline-info" href="javascript:history.back()" role="button" >뒤로가기</a>
+	<a class="btn btn-outline-primary" href="star.do?bId=${content_view.bId}" role="button">즐겨찾기 추가</a>
+	<a class="btn btn-outline-primary" href="stardel.do?bId=${content_view.bId}" role="button">즐겨찾기 해제</a>
+
 </body>
 </html>

@@ -6,18 +6,16 @@ import javax.servlet.http.HttpServletResponse;
 import com.study.jsp.BDao;
 import com.study.jsp.BDto;
 
-public class BRiviewCommand implements BCommand {
+public class BStarCommand implements BCommand {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
-
-		String bId =request.getParameter("bId");
-		String sumscore = request.getParameter("sumscore");
-		System.out.println(bId);
-		System.out.println(sumscore);
-		BDao dao = BDao.getInstance();
-		BDto dto = dao.riview(bId,sumscore,request,response);
 		
+		
+		String bId =request.getParameter("bId");
+		System.out.println(bId);
+		BDao dao = BDao.getInstance();
+		BDto dto = dao.star(bId,request,response);
 	}
 
 }

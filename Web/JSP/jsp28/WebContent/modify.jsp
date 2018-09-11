@@ -42,73 +42,57 @@
 <body>
 		<form action="modifyOk.go" method= "post" name = "reg_frm">
 
-		<div class="input-group">
-			<div class="input-group-prepend">
-				<span class="input-group-text">아이디</span>
-				<div class="alert alert-danger" role="alert">
-				 <%= dto.getId() %>
-				</div>
-			</div>
-		</div>
 
-		<div class="input-group">
-			<div class="input-group-prepend">
-				<span class="input-group-text">비밀번호</span>
-			</div>
-			<input type="password" aria-label="First name" class="form-control"
-				name="pw">
-		</div>
-
-		<div class="input-group">
-			<div class="input-group-prepend">
-				<span class="input-group-text">비밀번호 확인</span>
-			</div>
-			<input type="password" aria-label="First name" class="form-control"
-				name="pw_check">
-		</div>
-
-		<div class="input-group">
-			<div class="input-group-prepend">
-				<span class="input-group-text">이름</span>
-				<div class="alert alert-danger" role="alert">
-				<%= dto.getName() %>
-				</div>
-			</div>
-		</div>
-
-		<div class="input-group">
-			<div class="input-group-prepend">
-				<span class="input-group-text">메일</span>
-			</div>
-			<span><input type="text" aria-label="First name"
-				class="form-control" name="eMail"></span>
-		</div>
-
-		<select class="custom-select" name="eMail2">
-			<option selected>주소를 눌러주세요</option>
-			<option value="naver.com">네이버</option>
-			<option value="daum.net">다음</option>
-			<option value="google.com">구글</option>
-		</select>
-
-		<div class="input-group">
-			<div class="input-group-prepend">
-				<span class="input-group-text">주소</span>
-			</div>
-			<input type="text" aria-label="First name" class="form-control"
-				name="address">
-		</div>
-
+		<table class="table table-sm">
+			<tbody>
+				<tr>
+					<th scope="row">아이디</th>
+					<td><%= dto.getId() %></td>
+				</tr>
+				<tr>
+					<th scope="row">비밀번호</th>
+					<td>
+					<input type="password" aria-label="First name" class="form-control"	name="pw">
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">비밀번호 확인</th>
+					<td>
+					<input type="password" aria-label="First name" class="form-control"	name="pw_check">
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">이름</th>
+					<td><%= dto.getName() %></td>
+				</tr>
+				<tr>
+					<th scope="row">메일주소</th>
+					<td>
+					<input type="text" aria-label="First name" class="form-control"	name="eMail">
+					</td>
+				</tr>
+				<th>
+					<td>
+					<select class="custom-select" name="eMail2">
+						<option selected>주소를 눌러주세요</option>
+						<option value="naver.com">네이버</option>
+						<option value="daum.net">다음</option>
+						<option value="google.com">구글</option>
+					</select>
+					</td>
+				</th>
+				<tr>
+					<th scope="row">주소</th>
+					<td>
+					<input type="text" aria-label="First name" class="form-control"	name="address">
+					</td>
+				</tr>			
+		</tbody>
+		</table>
 		<button type="button" class="btn btn-outline-primary"
 			onclick="updateInfoConfirm()">수정</button>
 		<button type="reset" class="btn btn-outline-primary"
-			onclick="javascript:window.location='list.jsp'">취소</button>
-
-
-
-
+			onclick="javascript:window.location='list.do'">취소</button>
 	</form>
-
-
 </body>
 </html>

@@ -185,6 +185,8 @@
 						</script></td>
 				</tr>
 				<tr>
+			</tbody>
+		</table>
 					<a class="btn btn-outline-primary" href="javascript:form_check();"
 						role="button">수정완료</a>
 					<a class="btn btn-outline-secondary"
@@ -193,9 +195,6 @@
 					<a class="btn btn-outline-danger"
 						href="content_view.do?bId=${content_view.bId}" role="button">취소</a>
 
-				</tr>
-			</tbody>
-		</table>
 	</form>
 
 </body>

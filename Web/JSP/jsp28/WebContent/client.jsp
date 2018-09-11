@@ -52,7 +52,7 @@
 	</div>
 	<div>
 		<button type ="button" onclick="closeSocket();">채팅방 닫기</button>
-		<button type ="button" onclick="javascript:window.location='list.jsp'">메뉴로 돌아가기</button>
+		<button type ="button" onclick="javascript:window.location='list.do'">메뉴로 돌아가기</button>
 	</div>
 	<!--  Server responses get written here -->
 	<div class="alert alert-success" role="alert">
