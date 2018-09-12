@@ -49,23 +49,41 @@
 								out.println(session.getAttribute("id"));
 								%>">
       <label for="inputPassword" class="sr-only">Password</label>
-      <input type="password" id="inputPassword"  name ="pw" class="form-control" placeholder="Password" required>
+      <input type="password" id="inputPassword"  name ="pw" class="form-control" placeholder="Password" required><br />
    
-      <div class="checkbox mb-3">
-        <label>
-          <input type="checkbox" value="remember-me"> Remember me
-        </label>
+      
+      
+      <button class="btn btn-lg btn-primary btn-block" type="button" data-target="#layerpop" data-toggle="modal">Sign in</button>
+
+<div class="modal fade" id="layerpop" >
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- header -->
+      <div class="modal-header">
+        <!-- header title -->
+        <h4 class="modal-title">광고 영상</h4>
       </div>
-      
-      
-      <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+      <!-- body -->
+      <div class="modal-body">
+		<iframe width="470" height="300" src="https://www.youtube.com/embed/asciEwftclo?rel=0&amp;controls=0&amp;showinfo=0&amp;autoplay=1&amp;loop=1&mute=1"
+	  	frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+      </div>
+      <!-- Footer -->
+      <div class="modal-footer">
+        시청해 주셔서 감사합니다
+
+        <button type="submit" class="btn btn-default">로그인</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
       <button class="btn btn-lg btn-primary btn-block" type="submit" onclick="javascript:window.location='join.jsp'">Sign up</button>
       <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
     </form>
 
-
  <!-- ----------------------------------------------------- -->
-
 
 
  <!-- ----------------------------------------------------- -->

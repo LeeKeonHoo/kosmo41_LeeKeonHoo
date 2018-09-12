@@ -31,6 +31,7 @@
 			    return;
 			}		
 			}
+		
 	</script>
 	
 	
@@ -89,6 +90,10 @@
       <th scope="row">업로드 파일</th>
 		<td>
 		<a href="#" onclick="onDownload('${content_view.bId}')">${content_view.upload}</a>
+		<% if(session.getAttribute("id2").equals("list.do")) { %>
+		<% if(session.getAttribute("check3").equals("yes")){ %>
+		<img src = "<%= request.getContextPath() %>/upload/${content_view.upload}"  width="100" height="100">
+		<% }} %>
 		</td>
 	</tr>
 	<tr>
@@ -118,8 +123,15 @@
 	<a class="btn btn-outline-secondary" href="list.do?page=<%= session.getAttribute("cpage") %>" role="button">목록보기</a>
 	<a class="btn btn-outline-success" href="reply_view.do?bId=${content_view.bId}" role="button">답변</a>
 	<a class="btn btn-outline-info" href="javascript:history.back()" role="button" >뒤로가기</a>
-	<a class="btn btn-outline-primary" href="star.do?bId=${content_view.bId}" role="button">즐겨찾기 추가</a>
-	<a class="btn btn-outline-primary" href="stardel.do?bId=${content_view.bId}" role="button">즐겨찾기 해제</a>
+
+<% if(session.getAttribute("id2").equals("list.do")) { %>
+<% if(session.getAttribute("check2").equals("yes")) { %>
+   	<a class="btn btn-outline-primary" href="star.do?bId=${content_view.bId}" role="button" ><img src="<%= request.getContextPath() %>/image/star1.jpg" width="80"></a>
+<% }} %>
+<% if(session.getAttribute("id2").equals("list.do")) { %>
+<% if(session.getAttribute("check2").equals("no")) { %>
+	<a class="btn btn-outline-primary" href="stardel.do?bId=${content_view.bId}" role="button" ><img src="<%= request.getContextPath() %>/image/star2.jpg" width="80"></a>
+<% }} %>
 
 </body>
 </html>

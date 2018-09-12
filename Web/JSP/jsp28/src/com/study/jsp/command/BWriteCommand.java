@@ -33,8 +33,9 @@ public class BWriteCommand implements BCommand {
 			String food =multi.getParameter("food");
 			String sido =multi.getParameter("sido");
 			String gigungu =multi.getParameter("gigungu");
+			String gongji =multi.getParameter("gongji");
 			BDao dao = BDao.getInstance();
-			dao.write(bName, bTitle, bContent,filename,food, sido, gigungu);
+			dao.write(bName, bTitle, bContent,filename,food, sido, gigungu,gongji);
 
 		  	String regip = request.getRemoteAddr();
 

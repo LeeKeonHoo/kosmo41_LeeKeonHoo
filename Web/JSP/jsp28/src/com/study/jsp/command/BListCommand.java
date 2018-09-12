@@ -42,7 +42,7 @@ public class BListCommand implements BCommand {
 		
 		ArrayList<BDto> dtos = dao.list(nPage, search, option,request);
 		request.setAttribute("list", dtos);
-		
+
 		
 
 	}

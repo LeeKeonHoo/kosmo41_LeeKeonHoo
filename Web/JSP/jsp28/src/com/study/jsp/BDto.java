@@ -20,9 +20,12 @@ public class BDto {
 	String sumscore;
 	String avgscore;
 	String upload;
+	String star;
+	String gongji;
 	
 	public BDto(int bId, String bName, 	String bTitle, String bContent,	Timestamp bDate,
-			int bHit,int bGroup,int bStep,	int bIndent, String food, String sido, String gigungu,String manscore,String sumscore,String avgscore,String upload) {
+			int bHit,int bGroup,int bStep,	int bIndent, String food, String sido, String gigungu,
+			String manscore,String sumscore,String avgscore,String upload, String star,String gongji) {
 		this.bId=bId;
 		this.bName=bName;
 		this.bTitle=bTitle;
@@ -39,6 +42,8 @@ public class BDto {
 		this.sumscore=sumscore;
 		this.avgscore=avgscore;
 		this.upload=upload;		
+		this.star=star;		
+		this.gongji=gongji;		
 	}
 	
 	public String getUpload() {

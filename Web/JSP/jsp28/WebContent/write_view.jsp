@@ -46,7 +46,15 @@
 			<tbody>
 				<tr>
 					<th scope="row">이름</th>
-					<td><input type="hidden" name="bName" value="<%=name%>"><%=name%></td>
+					<td><input type="hidden" name="bName" value="<%=name%>"><%=name%>&nbsp;&nbsp;&nbsp;
+		<% if(session.getAttribute("id").equals("admin")){ %>
+					<input type="radio" name="gongji" value="0">일반글
+					<input type="radio" name="gongji" value="-1" checked>공지사항
+		<% }else{ %>
+					<input type="hidden" name="gongji" value="0">
+		<% } %>
+					</td>
+					
 				</tr>
 				<tr>
 					<th scope="row">종류</th>
@@ -178,7 +186,7 @@
 						</script></td>
 				</tr>
 				<th scope="row">업로드 파일</th>
-				<td><input type="file" name="filename"></td>
+				<td><input type="file" accept="image/*" name="filename"></td>
 				<tr>
 					<td><input class="btn btn-primary" type="submit" value="작성">
 						<a class="btn btn-outline-primary" href="list.do" role="button">취소</a>

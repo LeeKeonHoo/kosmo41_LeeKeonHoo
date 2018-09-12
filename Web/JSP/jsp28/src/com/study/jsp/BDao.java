@@ -34,14 +34,14 @@ public class BDao {
 		return instance;
 	}
 
-	public void write(String bName,String bTitle,String bContent,String filename,String food, String sido, String gigungu) {
+	public void write(String bName,String bTitle,String bContent,String filename,String food, String sido, String gigungu,String gongji) {
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		String query = "insert into mvc_board " +
-						"(bId, bName, bTitle, bContent, bHit, bGroup, bStep, bIndent, manscore, sumscore, avgscore, upload,food, sido, gigungu) " +
+						"(bId, bName, bTitle, bContent, bHit, bGroup, bStep, bIndent, manscore, sumscore, avgscore, upload,food, sido, gigungu,gongji) " +
 						"values " + 
-						"(mvc_board_seq.nextval, ?, ?, ?, 0, mvc_board_seq.currval, 0, 0, 0, 0, 0, ?, ? ,? ,?)";
+						"(mvc_board_seq.nextval, ?, ?, ?, 0, mvc_board_seq.currval, 0, 0, 0, 0, 0, ?, ? ,? ,?,?)";
 
 		try {
 			con = dataSource.getConnection();
@@ -53,6 +53,7 @@ public class BDao {
 			pstmt.setString(5, food);
 			pstmt.setString(6, sido);
 			pstmt.setString(7, gigungu);
+			pstmt.setString(8, gongji);
 			int rn = pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -89,7 +90,7 @@ public class BDao {
 						  "	     from ( " +
 						  "	        select * " +
 						  "	          from mvc_board " +
-						  "	         order by bgroup desc, bstep asc ) A " +
+						  "	         order by gongji asc,bgroup desc, bstep asc) A " +
 						  "	    where rownum <= ? ) B " +
 						  "	where B.num >= ? ";
 
@@ -104,7 +105,7 @@ public class BDao {
 						  "	     from ( " +
 						  "	        select * " +
 						  "	          from mvc_board " +
-						  "	         order by bgroup desc, bstep asc ) A " +
+						  "	         order by gongji asc,bgroup desc, bstep asc) A " +
 						  "	    where rownum <= ? ) B " +
 						  "	where B.num >= ? ";
 
@@ -112,7 +113,7 @@ public class BDao {
 			pstmt.setInt(1, nEnd);
 			pstmt.setInt(2, nStart);
 			}
-			else if(option.equals("0")) {
+			else if(option.equals("0")) {	//평점 순위
 			String query ="select * " +
 					  	  "  from ( " +
 						  "	   select rownum num, A.* " +
@@ -120,7 +121,7 @@ public class BDao {
 						  "	        select * " +
 						  "	          from mvc_board " +
 						  "             where avgscore>0 " +
-						  "             order by avgscore desc, " +
+						  "             order by gongji asc,avgscore desc, " +
 						  "	         bgroup desc, bstep asc ) A " +
 						  "	    where rownum <= ? ) B " +
 						  "	where B.num >= ? ";
@@ -138,7 +139,7 @@ public class BDao {
 						  "	        select * " +
 						  "	          from mvc_board " +
 						  "             where bTitle like ? " +
-						  "	         order by bgroup desc, bstep asc ) A " +
+						  "	         order by gongji asc,bgroup desc, bstep asc ) A " +
 						  "	    where rownum <= ? ) B " +
 						  "	where B.num >= ? ";
 
@@ -156,7 +157,7 @@ public class BDao {
 						  "	        select * " +
 						  "	          from mvc_board " +
 						  "             where bName like ? " +
-						  "	         order by bgroup desc, bstep asc ) A " +
+						  "	         order by gongji asc,bgroup desc, bstep asc ) A " +
 						  "	    where rownum <= ? ) B " +
 						  "	where B.num >= ? ";
 
@@ -174,7 +175,7 @@ public class BDao {
 						  "	        select * " +
 						  "	          from mvc_board " +
 						  "             where food like ? " +
-						  "	         order by bgroup desc, bstep asc ) A " +
+						  "	         order by gongji asc,bgroup desc, bstep asc ) A " +
 						  "	    where rownum <= ? ) B " +
 						  "	where B.num >= ? ";
 
@@ -192,7 +193,7 @@ public class BDao {
 						  "	        select * " +
 						  "	          from mvc_board " +
 						  "             where sido like ? " +
-						  "	         order by bgroup desc, bstep asc ) A " +
+						  "	         order by gongji asc,bgroup desc, bstep asc ) A " +
 						  "	    where rownum <= ? ) B " +
 						  "	where B.num >= ? ";
 
@@ -210,7 +211,7 @@ public class BDao {
 						  "	        select * " +
 						  "	          from mvc_board " +
 						  "             where gigungu like ? " +
-						  "	         order by bgroup desc, bstep asc ) A " +
+						  "	         order by gongji asc,bgroup desc, bstep asc ) A " +
 						  "	    where rownum <= ? ) B " +
 						  "	where B.num >= ? ";
 
@@ -220,23 +221,22 @@ public class BDao {
 			pstmt.setInt(2, nEnd);
 			pstmt.setInt(3, nStart);
 			}
-			else if(option.equals("6")) {
+			else if(option.equals("6")) {	//즐겨찾기 버튼
 			String query ="select * " +
 					  	  "  from ( " +
 						  "	   select rownum num, A.* " +
 						  "	     from ( " +
 						  "	        select * " +
 						  "	          from mvc_board " +
-						  "             where star2 = '"+sid+"' " +
-						  "	         order by bgroup desc, bstep asc ) A " +
+						  "             where star like '%"+sid+"%' " +
+						  "	         order by gongji asc,bgroup desc, bstep asc ) A " +
 						  "	    where rownum <= ? ) B " +
 						  "	where B.num >= ? ";
 
 			pstmt=con.prepareStatement(query);
 			pstmt.setInt(1, nEnd);
 			pstmt.setInt(2, nStart);
-			}
-			
+			}				
 			
 			resultSet = pstmt.executeQuery();
 			
@@ -257,9 +257,13 @@ public class BDao {
 				String sumscore=resultSet.getString("sumscore");
 				String avgscore=resultSet.getString("avgscore");
 				String upload=resultSet.getString("upload");
+				String star=resultSet.getString("star");
+				String gongji=resultSet.getString("gongji");
+				
 				
 				BDto dto =new BDto(bId, bName, bTitle, bContent, bDate,
-									bHit, bGroup, bStep, bIndent, food, sido, gigungu, manscore, sumscore, avgscore,upload);
+									bHit, bGroup, bStep, bIndent, food, sido,
+									gigungu, manscore, sumscore, avgscore,upload,star,gongji);
 				dtos.add(dto);
 			}
 		}catch(Exception e) {
@@ -418,10 +422,34 @@ public class BDao {
 				String sumscore=resultSet.getString("sumscore");
 				String avgscore=resultSet.getString("avgscore");
 				String upload=resultSet.getString("upload");
+				String star=resultSet.getString("star");
+				String gongji=resultSet.getString("gongji");
+				
 							
 				dto = new BDto(bId, bName, bTitle, bContent, bDate,
-								bHit, bGroup, bStep, bIndent,food,sido,gigungu,manscore,sumscore,avgscore, upload);
-		
+								bHit, bGroup, bStep, bIndent,food,sido,
+								gigungu,manscore,sumscore,avgscore, upload,star,gongji);
+
+				System.out.println(star);
+				System.out.println(star.indexOf(sid));
+				
+				//파일 업로드시 미리보기 사진 추가 유무
+				if(upload != null) {	//파일이 있는 경우
+					session.setAttribute("check3", "yes");					
+				}
+				else if(upload == null) {	//파일이 없는 경우
+					session.setAttribute("check3", "no");
+				}
+
+				// 즐겨찾기 버튼 추가유무
+				if(star.indexOf(sid)<0) {	//포함 x
+					session.setAttribute("check2", "yes");					
+				}
+				else if(star.indexOf(sid)>=0) {	//포함 o
+					session.setAttribute("check2", "no");
+				}
+
+				//수정 삭제 버튼 추가 유무
 				if(sid.equals(bName)) {
 					session.setAttribute("check", "yes");
 				}
@@ -432,6 +460,7 @@ public class BDao {
 				{
 					session.setAttribute("check", "no");
 				}
+				
 			}
 			
 		}catch(Exception e) {
@@ -485,7 +514,7 @@ public class BDao {
 			}
 		}
 	}
-	//수정하기
+	//수정
 	
 	private void upHit(String bId) {
 
@@ -536,7 +565,7 @@ public class BDao {
 			}		
 		}
 	}
-	//삭제
+	//글 삭제
 	
 	public BDto reply_view(String str) {
 		
@@ -570,9 +599,12 @@ public class BDao {
 				String sumscore=resultSet.getString("sumscore");
 				String avgscore=resultSet.getString("avgscore");
 				String upload=resultSet.getString("upload");
+				String star=resultSet.getString("star");
+				String gongji=resultSet.getString("gongji");
 				
 				dto = new BDto(bId, bName, bTitle, bContent, bDate,
-								bHit, bGroup, bStep, bIndent,food,sido,gigungu,manscore,sumscore,avgscore, upload);
+								bHit, bGroup, bStep, bIndent,food,sido,
+								gigungu,manscore,sumscore,avgscore, upload,star,gongji);
 
 			}
 		}catch(Exception e) {
@@ -588,7 +620,7 @@ public class BDao {
 		}
 		return dto;
 	}
-	//답변달기
+	//답변 달기 버튼
 	
 	public void reply(String bId, String bName, String bTitle, String bContent,
 					String bGroup, String bStep, String bIndent) {	//답변하기
@@ -624,7 +656,7 @@ public class BDao {
 			}		
 		}
 	}
-	//답변 수정하기
+	//답변 달기
 
 	private void replyShape(String strGroup, String strStep) {
 		Connection con =null;
@@ -651,7 +683,7 @@ public class BDao {
 			}		
 		}
 	}
-	//답변 글 아래 생성
+	//게시글 아래 답변글 달기
 	
 	public BDto riview(String bId,String sumscore,HttpServletRequest request, HttpServletResponse response) {
 
@@ -741,12 +773,10 @@ public class BDao {
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-		}
-				
-		return null;
-		
+		}			
+		return null;	
 	}
-	//점수주기
+	//평점 주기
 	
 	public BDto star(String bId,HttpServletRequest request, HttpServletResponse response) {
 
@@ -833,9 +863,7 @@ public class BDao {
 				e1.printStackTrace();
 			}
 		}
-			
-		return null;
-		
+		return null;	
 	}
 	//즐겨찾기 추가
 	
@@ -859,14 +887,6 @@ public class BDao {
 			e.printStackTrace();
 		} finally {
 			try {
-				response.setContentType("text/html; charset=UTF-8");
-				PrintWriter writer = response.getWriter();
-				writer.println("<script language='javascript'>");
-				writer.println("alert('즐겨찾기에 삭제했습니다.');");
-				writer.println("location.href=history.back()");
-				writer.println("</script>");
-				writer.close();
-
 				if (pstmt != null)	pstmt.close();
 				if (con != null)	con.close();
 			} catch (Exception e2) {
@@ -877,7 +897,7 @@ public class BDao {
 	}
 	//즐겨찾기 삭제
 	
-	
-	
+
+
 }
 

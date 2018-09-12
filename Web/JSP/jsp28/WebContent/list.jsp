@@ -74,6 +74,8 @@
 			</tr>
 		</thead>
 		<tbody>
+
+
 			<c:forEach items="${list}" var="dto">
 				<tr>
 					<th scope="row">${dto.bId}</th>
