@@ -30,8 +30,7 @@
 			}else{   //취소
 			    return;
 			}		
-			}
-		
+			}		
 	</script>
 	
 	

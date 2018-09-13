@@ -46,15 +46,15 @@
 			<tbody>
 				<tr>
 					<th scope="row">이름</th>
-					<td><input type="hidden" name="bName" value="<%=name%>"><%=name%>&nbsp;&nbsp;&nbsp;
-		<% if(session.getAttribute("id").equals("admin")){ %>
-					<input type="radio" name="gongji" value="0">일반글
-					<input type="radio" name="gongji" value="-1" checked>공지사항
-		<% }else{ %>
-					<input type="hidden" name="gongji" value="0">
-		<% } %>
+					<td>
+						<input type="hidden" name="bName" value="<%=name%>"><%=name%>&nbsp;&nbsp;&nbsp;
+					<% if(session.getAttribute("id").equals("admin")){ %>
+						<input type="radio" name="gongji" value="0">일반글
+						<input type="radio" name="gongji" value="-1" checked>공지사항
+					<% }else{ %>
+						<input type="hidden" name="gongji" value="0">
+					<% } %>
 					</td>
-					
 				</tr>
 				<tr>
 					<th scope="row">종류</th>

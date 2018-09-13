@@ -39,7 +39,39 @@
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
 	integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 	crossorigin="anonymous"></script>
-	
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+<script>
+
+	if(!checkPoupCookie("close")){
+		window.open("../jsp28/popup.jsp","TITLE","left=60, top=60, width=410, height=410, resizable=no, scrollbar=no, status=no, menubar=no, toolbar=no, location=no");
+	}
+
+	function checkPoupCookie(cookieName){
+		var cookie = document.cookie;
+
+		if(cookie.length > 0){
+		// 현재 쿠키가 존재할 경우
+
+			startIndex = cookie.indexOf(cookieName);
+			// 자식창에서 set해준 쿠키명이 존재하는지 검색
+
+			if(startIndex != -1){
+				// 존재한다면
+				return true;
+			}else{
+		
+			return false;
+			// 쿠키 내에 해당 쿠키가 존재하지 않을 경우
+			};
+		}else{
+
+		return false;
+		// 쿠키 자체가 없을 경우
+		};
+	}
+</script>
+
 </head>
 <body>
 	<table class="table table-hover table-hover">
@@ -53,10 +85,10 @@
 				</button>
 			</div>
 			<form action="logout.go" method="post">
-				<input type="submit" value="로그아웃">&nbsp;&nbsp;&nbsp;
-				<input type="button" value="정보수정"
+				<input type="submit" value="로그아웃" class="btn btn-outline-warning">&nbsp;&nbsp;&nbsp;
+				<input type="button" value="정보수정" class="btn btn-outline-primary"
 					onclick="javascript:window.location='modify.jsp'">&nbsp;&nbsp;&nbsp;
-				<input type="button" value="채팅"
+				<input type="button" value="채팅" class="btn btn-outline-danger"
 					onclick="javascript:window.location='client.jsp'">&nbsp;&nbsp;&nbsp;
 				
 			</form>
@@ -82,7 +114,7 @@
 					<td>${dto.bName}</td>
 					<td style="max-width: 150px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
 					<c:forEach begin="1" end="${dto.bIndent}">&nbsp;&nbsp;&nbsp;</c:forEach>
-					<a href="content_view.do?bId=${dto.bId}">${dto.bTitle}</a></td>
+					<a style="CURSOR:hand;" title="${dto.bTitle}"  href="content_view.do?bId=${dto.bId}">${dto.bTitle}</a></td>
 					<td>${dto.food }</td>
 					<td>${dto.sido }</td>
 					<td>${dto.gigungu }</td>
@@ -99,27 +131,27 @@
 	<td><a class="btn btn-outline-primary" href="write_view.do" role="button">글작성</a></td>
 
 		<form action ="list.do" method="post">
-		<input type = "hidden" name = "search" value="<%=id%>">
+		<input type = "hidden" name = "search" value="<%=name%>">
 		<input type = "hidden" name = "option" value="2">
-	<td><button class="btn btn-outline-info" role="submit" >자기글 보기</button></td>
+	<td><button class="btn btn-outline-secondary" role="submit" >자기글 보기</button></td>
 		</form>
 	
 		<form action ="list.do" method="post">
 		<input type = "hidden" name = "search" value="">
 		<input type = "hidden" name = "option" value="0">
-	<td><button class="btn btn-outline-info" role="submit" >평점 순위</button></td>
+	<td><button class="btn btn-outline-success" role="submit" >평점 순위</button></td>
 		</form>
 
 		<form action ="list.do" method="post">
 		<input type = "hidden" name = "search" value="">
 		<input type = "hidden" name = "option" value="1">
-	<td><button class="btn btn-outline-info" role="submit" >전체글 보기</button></td>
+	<td><button class="btn btn-outline-danger" role="submit" >전체글 보기</button></td>
 		</form>
 		
 		<form action ="list.do" method="post">
 		<input type = "hidden" name = "search" value="">
 		<input type = "hidden" name = "option" value="6">
-	<td><button class="btn btn-outline-info" role="submit" >즐겨찾기</button></td>
+	<td><button class="btn btn-outline-warning" role="submit" >즐겨찾기</button></td>
 		</form>
 		
 	<form action=list.do method="post">
@@ -215,7 +247,9 @@
 		하단에 보여줄 페이지 리스트의 갯수 : ${page.pageCount}<br>
 		시작 페이지 : ${page.startPage}<br>
 		끝 페이지 : ${page.endPage}<br>
+
 	</div>
+
 
 </body>
 </html>

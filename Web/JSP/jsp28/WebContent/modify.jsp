@@ -69,10 +69,6 @@
 					<th scope="row">메일주소</th>
 					<td>
 					<input type="text" aria-label="First name" class="form-control"	name="eMail">
-					</td>
-				</tr>
-				<th>
-					<td>
 					<select class="custom-select" name="eMail2">
 						<option selected>주소를 눌러주세요</option>
 						<option value="naver.com">네이버</option>
@@ -80,7 +76,7 @@
 						<option value="google.com">구글</option>
 					</select>
 					</td>
-				</th>
+				</tr>
 				<tr>
 					<th scope="row">주소</th>
 					<td>

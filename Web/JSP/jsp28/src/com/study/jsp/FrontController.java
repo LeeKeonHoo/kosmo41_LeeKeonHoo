@@ -101,6 +101,7 @@ public class FrontController extends HttpServlet {
 		}else if(com.equals("/download.do")){	//다운로드
 			command = new BDownloadCommand();
 			command.execute(request, response);
+			viewPage = "content_view.do";
 
 		}else if(com.equals("/review.do")){	// 평점주기
 			command = new BRiviewCommand();

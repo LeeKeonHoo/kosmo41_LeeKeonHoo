@@ -43,7 +43,7 @@
 	}
 %>
 	<div>
-		사용자 아이디 : <%= id %>
+		사용자 이름 : <%= name %>
 		<button type ="button" onclick="openSocket();">채팅방 접속</button>
 	</div>
 	<div>
@@ -102,7 +102,7 @@
 		* Sends the value of the text input to the server
 		*/
 		function send(){
-			var id = "<%= id %>";
+			var id = "<%= name %>";
 			var text = document.getElementById("messageinput").value;
 			if(id == "admin"){
 				webSocket.send("[운영진](" + id + ") : " + text);
