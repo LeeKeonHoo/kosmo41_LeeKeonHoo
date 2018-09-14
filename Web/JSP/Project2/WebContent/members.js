@@ -10,7 +10,13 @@ function infoConfirm(){
 		reg_frm.id.focus();
 		return;
 	}
-	
+
+	if(document.reg_frm.id.value.length >20){
+		alert("아이디는 20글자 이하이어야 합니다");
+		reg_frm.id.focus();
+		return;
+	}
+
 	if(document.reg_frm.pw.value.length ==0){
 		alert("비밀번호는 필수사항입니다");
 		reg_frm.pw.focus();

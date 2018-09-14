@@ -30,6 +30,14 @@
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
 	integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 	crossorigin="anonymous"></script>
+	
+	<!-- ------------------------------------------------ -->
+	    <script src="http://code.jquery.com/jquery.js"></script>
+    
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+	<meta name="google-signin-client_id" content="105485682983-u7954einnd0lb8ersmkfj79v1r0tiqk2.apps.googleusercontent.com">
+	<!-- ------------------------------------------------ -->
+	
 
 <script language="javascript"> 
 //ENTER 안먹게 하는것 
@@ -38,7 +46,7 @@ function captureReturnKey(e) {
     return false; 
 } 
  
-
+///////////////////////////아이디 기억하기
 $(document).ready(function(){
     // 저장된 쿠키값을 가져와서 ID 칸에 넣어준다. 없으면 공백으로 들어감.
     var userInputId = getCookie("userInputId");
@@ -92,6 +100,85 @@ function getCookie(cookieName) {
     }
     return unescape(cookieValue);
 }
+/////////////// 구글 로그인
+var ggID;
+var ggName;
+var ggImageURL;
+var queryString = "";
+
+function onSignIn(googleUser) {
+	
+	var profile = googleUser.getBasicProfile();
+	console.log('ID: ' + profile.getId());
+	console.log('Name: ' + profile.getName());
+	console.log('Image URL: ' + profile.getImageUrl());
+	
+	ggID = profile.getId();
+	ggName =profile.getName();
+	ggImageURL =profile.getImageUrl();
+	queryString = "ggID="+ggID+"&ggName="+ggName+"&ggImageURL="+ggImageURL;
+	
+	
+	$('#login').css('display', 'none');
+	$('#logout').css('display', 'block');
+	$('#upic').attr('src', profile.getImageUrl());
+	$('#uname').html('[ ' +profile.getName() + ' ]');
+	
+	submit_ajax(); 
+
+	location.replace("list.do");
+}
+function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+    	console.log('User signed out.');
+    
+    	$('#login').css('display', 'block');
+    	$('#logout').css('display', 'none');
+    	$('#upic').attr('src', '');
+    	$('#uname').html('');
+    });
+	submit2_ajax(); 
+
+	location.replace("login.jsp");
+
+}
+
+function submit_ajax() {
+      $.ajax({
+         url : 'google.go',
+         type : 'POST',
+         data : queryString,
+         dataType : 'json',
+         success : function(json) {
+            var result = eval(json);
+            if (result[0].result == "ok") {
+               alert("setOK");
+            } else {
+               alert(result[0].desc);
+            }
+         }
+      })
+   }
+
+function submit2_ajax() {
+    $.ajax({
+       url : 'googledel.go',
+       type : 'POST',
+       data : queryString,
+       dataType : 'json',
+       success : function(json) {
+          var result = eval(json);
+          if (result[0].result == "ok") {
+             alert("setOK");
+          } else {
+             alert(result[0].desc);
+          }
+       }
+    })
+ }
+
+
 </script>
 
 </head>
@@ -137,14 +224,11 @@ function getCookie(cookieName) {
 
 
       <button class="btn btn-lg btn-primary btn-block" type="submit" onclick="javascript:window.location='join.jsp'">Sign up</button>
+	
+		<div id="login" class="g-signin2" data-onsuccess="onSignIn" ></div>
+	
       <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
     </form>
-
- <!-- ----------------------------------------------------- -->
-
-
- <!-- ----------------------------------------------------- -->
-
 
  </body>
 </html>

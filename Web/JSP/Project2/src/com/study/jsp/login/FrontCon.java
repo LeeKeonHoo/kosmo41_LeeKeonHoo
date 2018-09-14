@@ -1,4 +1,4 @@
-package com.study.jsp;
+package com.study.jsp.login;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -52,11 +52,14 @@ public class FrontCon extends HttpServlet {
 			
 		}else if(command.equals("/logout.go")) {
 			logoutOk(request,response);
-		
 		}else if(command.equals("/google.go")) {
 			Service service = new googleOk();
 			service.execute(request, response);
-	}
+		}
+		else if(command.equals("/googledel.go")) {
+			Service service = new googledel();
+			service.execute(request, response);
+		}
 	}
 
 	public void logoutOk (HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {

@@ -9,7 +9,11 @@
 <script>
 	function setCookie(name, value, expiredays){
 		var todayDate = new Date();
-		todayDate.setDate(todayDate.getDate() + expiredays); //클릭한 후 24시간 뒤
+	    todayDate = new Date(parseInt(todayDate.getTime() / 86400000) * 86400000 + 54000000);  
+	    if ( todayDate > new Date() )  
+	    { 
+	    expiredays = expiredays - 1;
+	    }	//하루가 지나면 팝업창 띄움
 		document.cookie = name + "=" + escape( value ) + "; path=/; expires=" + todayDate.toGMTString() + ";"
 	}
 
@@ -25,7 +29,7 @@
 </head>
 <body>
 
-	<img src="../jsp28/image/baemin.png" width="100%" height="100%" border="0">
+	<img src="../Project2/image/baemin.png" width="100%" height="100%" border="0">
 	<input type="checkbox" onClick="closePop();">오늘 하루 동안 열지 않음
 	<td style="font-size:11px;"><a href="javascript:self.close();" onfocus="this.blur()">[닫기]</a></td>
 

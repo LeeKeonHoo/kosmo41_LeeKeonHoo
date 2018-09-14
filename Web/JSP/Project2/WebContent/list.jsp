@@ -40,11 +40,73 @@
 	integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 	crossorigin="anonymous"></script>
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script src="http://code.jquery.com/jquery.js"></script>
+    
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+	<meta name="google-signin-client_id" content="105485682983-u7954einnd0lb8ersmkfj79v1r0tiqk2.apps.googleusercontent.com">
 
 <script>
+////////////////////구글 로그인
+var ggID;
+var ggName;
+var ggImageURL;
+var queryString = "";
+function onSignIn(googleUser) {
+	
+	var profile = googleUser.getBasicProfile();
+	console.log('ID: ' + profile.getId());
+	console.log('Name: ' + profile.getName());
+	console.log('Image URL: ' + profile.getImageUrl());
+	
+	ggID = profile.getId();
+	ggName =profile.getName();
+	ggImageURL =profile.getImageUrl();
+	ggEmail =profile.getEmail();
+	queryString = "ggID="+ggID+"&ggName="+ggName+"&ggImageURL="+ggImageURL;
+	
+	
+	$('#login').css('display', 'none');
+	$('#logout').css('display', 'block');
+	$('#upic').attr('src', profile.getImageUrl());
+	$('#uname').html('[ ' +profile.getName() + ' ]');
+	
+}
+function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+    	console.log('User signed out.');
+    
+    	$('#login').css('display', 'block');
+    	$('#logout').css('display', 'none');
+    	$('#upic').attr('src', '');
+    	$('#uname').html('');
+    });
 
+    submit2_ajax(); 
+
+	location.replace("login.jsp");
+}
+
+function submit2_ajax() {
+    $.ajax({
+       url : 'googledel.go',
+       type : 'POST',
+       data : queryString,
+       dataType : 'json',
+       success : function(json) {
+          var result = eval(json);
+          if (result[0].result == "ok") {
+             alert("setOK");
+          } else {
+             alert(result[0].desc);
+          }
+       }
+    })
+ }
+
+/////////////////////팝업창 띄우기
 	if(!checkPoupCookie("close")){
-		window.open("../jsp28/popup.jsp","TITLE","left=60, top=60, width=410, height=410, resizable=no, scrollbar=no, status=no, menubar=no, toolbar=no, location=no");
+		window.open("../Project2/popup.jsp","TITLE","left=60, top=60, width=410, height=410, resizable=no, scrollbar=no, status=no, menubar=no, toolbar=no, location=no");
 	}
 
 	function checkPoupCookie(cookieName){
@@ -84,15 +146,24 @@
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
+
+		<% if(id.length() > 20){ %>	
+<div id="login" class="g-signin2" data-onsuccess="onSignIn" ></div>
+<div id="logout" style="display: none;" >
+    <input type="button" onclick="signOut();" value="로그아웃" class="btn btn-outline-danger"/><br>
+    <img id="upic" src=""><br>
+</div>
+		<% } %>
 			<form action="logout.go" method="post">
+		<% if(id.length() <= 20){ %>
 				<input type="submit" value="로그아웃" class="btn btn-outline-warning">&nbsp;&nbsp;&nbsp;
 				<input type="button" value="정보수정" class="btn btn-outline-primary"
 					onclick="javascript:window.location='modify.jsp'">&nbsp;&nbsp;&nbsp;
+		<% } %>
 				<input type="button" value="채팅" class="btn btn-outline-danger"
 					onclick="javascript:window.location='client.jsp'">&nbsp;&nbsp;&nbsp;
 				
 			</form>
-
 			<tr>
 				<th scope="col">번호</th>
 				<th scope="col">이름</th>

@@ -1,4 +1,4 @@
-package com.study.jsp;
+package com.study.jsp.login;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -24,23 +24,39 @@ public class loginOk implements Service {
 		String id = request.getParameter("id");	
 		String pw = request.getParameter("pw");
 		
+		System.out.println("id : "+id);
+		System.out.println("pw : "+pw);
+		System.out.println("length : "+id.length());
+		
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter writer = response.getWriter();		
 
 		MemberDao dao = MemberDao.getInstance();
 		int checkNum = dao.userCheck(id, pw);
 		if(checkNum == -1){
-			writer.println("아이디가 존재하지 않습니다");
+			response.setContentType("text/html; charset=UTF-8");
+			writer.println("<script language='javascript'>");
+			writer.println("alert('아이디가 존재하지 않습니다');");
+			writer.println("location.href='login.jsp'");
+			writer.println("</script>");
 			writer.close();
 		}else if(checkNum == 0){
-			writer.println("비밀번호가 틀립니다");
+			response.setContentType("text/html; charset=UTF-8");
+			writer.println("<script language='javascript'>");
+			writer.println("alert('비밀번호가 틀립니다');");
+			writer.println("location.href='login.jsp'");
+			writer.println("</script>");
 			writer.close();
 			
 		}else if(checkNum == 1){
 			MemberDto dto = dao.getMember(id);
 			
 			if(dto ==null){
-				writer.println("존재하지 않는 회원입니다");
+				response.setContentType("text/html; charset=UTF-8");
+				writer.println("<script language='javascript'>");
+				writer.println("alert('존재하지 않는 회원입니다');");
+				writer.println("location.href='login.jsp'");
+				writer.println("</script>");
 				writer.close();
 
 			}else{
@@ -51,7 +67,7 @@ public class loginOk implements Service {
 				session.setAttribute("id", id);
 				session.setAttribute("name", name);
 				session.setAttribute("ValidMem", "yes");
-				response.sendRedirect("main.jsp");		
+				response.sendRedirect("list.do");		
 			}
 		}
 	}

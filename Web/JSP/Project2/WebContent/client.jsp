@@ -74,7 +74,7 @@
 			
 			//Create a new instance of the websocket
 			//webSocket = new WebSocket("ws://localhost/ *ProjectName* /echo");
-			webSocket = new WebSocket("ws://localhost:8081/jsp28/websocketendpoint2");
+			webSocket = new WebSocket("ws://localhost:8081/Project2/websocketendpoint2");
 			
 			/**
 			* Binds functions to the listeners for the websocket
@@ -104,7 +104,7 @@
 		function send(){
 			var id = "<%= name %>";
 			var text = document.getElementById("messageinput").value;
-			if(id == "admin"){
+			if(id == "관리자"){
 				webSocket.send("[운영진](" + id + ") : " + text);
 			}else{
 				webSocket.send("(" + id + ") : " + text);
