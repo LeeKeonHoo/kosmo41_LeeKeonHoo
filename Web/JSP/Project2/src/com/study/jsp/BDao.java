@@ -399,6 +399,7 @@ public class BDao {
 			con = dataSource.getConnection();
 	
 			String sid = (String)session.getAttribute("id");
+			String name = (String) session.getAttribute("name");
 
 			String query = "select * from mvc_board where bId =?";
 			pstmt = con.prepareStatement(query);
@@ -450,7 +451,7 @@ public class BDao {
 				}
 
 				//수정 삭제 버튼 추가 유무
-				if(sid.equals(bName)) {
+				if(name.equals(bName)) {
 					session.setAttribute("check", "yes");
 				}
 				else if(sid.equals("admin")){			
