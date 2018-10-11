@@ -27,34 +27,36 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="검색해주세요"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:background="@drawable/line" />
 
         <Button
             android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="50dp"
             android:layout_weight="1"
-            android:text="검색" />
+            android:background="@drawable/search" />
 
         <Button
             android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="50dp"
             android:layout_weight="1"
-            android:text="음성 검색" />
+            android:background="@drawable/soundsearch" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="TextView"
+        android:visibility="gone" />
 
     <ListView
         android:id="@+id/listView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/holo_purple" />
+        android:layout_weight="1" />
 
     <TextView
         android:id="@+id/textView2"
@@ -62,4 +64,5 @@
         android:layout_height="wrap_content"
         android:text="TextView"
         android:visibility="gone" />
+
 </LinearLayout>

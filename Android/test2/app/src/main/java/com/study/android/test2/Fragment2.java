@@ -3,6 +3,7 @@ package com.study.android.test2;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -43,8 +45,6 @@ public class Fragment2 extends Fragment {
     TextView textView2;
 
     ListView listView1;
-    private List<String> list;          // 데이터를 넣은 리스트변수
-    private ArrayList<String> arraylist;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,6 +55,7 @@ public class Fragment2 extends Fragment {
         textView1 = rootView.findViewById(R.id.textView1);
         editText = rootView.findViewById(R.id.editText1);
 
+
         adapter = new SingerAdapter(getContext());
         listView1 = rootView.findViewById(R.id.listView2);
         listView1.setAdapter(adapter);
@@ -62,25 +63,60 @@ public class Fragment2 extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
 
-                SingerItem item = (SingerItem) adapter.getItem(position);
+                final SingerItem item = (SingerItem) adapter.getItem(position);
                 Toast.makeText(getActivity(),
-                        "selected : " + item.getName(), Toast.LENGTH_SHORT).show();
+                        "selected : " + item.getName() + item.getMobile(), Toast.LENGTH_SHORT).show();
+
+                {
+                    final List<String> ListItems = new ArrayList<>();
+                    ListItems.add("가사보기");
+                    ListItems.add("즐겨찾기");
+                    ListItems.add("닫기");
+                    final CharSequence[] items2 =  ListItems.toArray(new String[ ListItems.size()]);
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle(item.getName() + " - " + item.getMobile());
+                    builder.setItems(items2, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int pos) {
+                            String selectedText = items2[pos].toString();
+                            Toast.makeText(getActivity(), selectedText, Toast.LENGTH_SHORT).show();
+                            if(selectedText.equals("가사보기")) {
+                                String songname= item.getMobile();
+                                String singer = item.getName();
+                                String age = item.getAge();
+                                Intent intent = new Intent(getActivity(), Search.class);
+                                intent.putExtra("songname",songname);
+                                intent.putExtra("singer",singer);
+                                intent.putExtra("age",age);
+                                startActivity(intent);
+                            }
+                            else if(selectedText.equals("즐겨찾기")) {
+                                String songname= item.getMobile();
+                                String singer = item.getName();
+                                int star = item.getStar();
+                                Log.d(TAG,"즐겨찾기 눌름");
+//                                Intent intent = new Intent(getActivity(), Star.class);
+//                                intent.putExtra("songname",songname);
+//                                intent.putExtra("singer",singer);
+//                                intent.putExtra("age",age);
+//                                startActivity(intent);
+                                Log.d(TAG, String.valueOf(star));
+                                datastar(songname,singer,star);
+                            }
+
+                        }
+                    });
+                    builder.show();
+                }
+
             }
         });
 
         textView2 = rootView.findViewById(R.id.textView2);
 
-        createMyDatabase();
-        createMyTable();
-        selectAllData();
-        listView1.setTextFilterEnabled(true);
-
-        ////////////////////////검색//////////////////////////////////
-
-
-
-
-        /////////////////////////////////////////////////////////
+            createMyDatabase();
+            createMyTable();
+            selectAllData();
 
         button1 = rootView.findViewById(R.id.button1);
         button1.setOnClickListener(new View.OnClickListener(){
@@ -90,7 +126,7 @@ public class Fragment2 extends Fragment {
 
                 textView1.setText(editText.getText());
                 searchData();
-                }
+            }
         });
 
         /////////////////////음성인식 버튼//////////////////////////////////
@@ -118,10 +154,8 @@ public class Fragment2 extends Fragment {
 
         return rootView;
     }
-    /////////////////////////검색 메소드 //////////////////////////
 
 
-///////////////////////////////////////////////////////////////////////
     public void onEndOfSpeech() {
     }
 
@@ -142,6 +176,7 @@ public class Fragment2 extends Fragment {
 
         editText.setText(str);
         textView1.setText(str);
+        searchData();
     }
 
 
@@ -217,6 +252,7 @@ public class Fragment2 extends Fragment {
 
                     editText.setText(rs[0]);
                     textView1.setText(rs[0]);
+                    searchData();
                 }
 
                 break;
@@ -224,7 +260,7 @@ public class Fragment2 extends Fragment {
         }
     }
 
-    public void printInfo(String msg){
+     public void printInfo(String msg){
         textView2.append(msg + "\n");
     }
 
@@ -241,7 +277,7 @@ public class Fragment2 extends Fragment {
 
     private void createMyTable(){
         String sql =
-                "create table if not exists customer (name text,age integer, mobile text) ";
+                "create table if not exists customer (name text,age integer, mobile text,star integer) ";
         try{
             database.execSQL(sql);
 
@@ -249,12 +285,11 @@ public class Fragment2 extends Fragment {
         }catch (Exception e){
             e.printStackTrace();
         }
-        dataadd();
     }
 
     private void selectAllData(){
 
-        String sql = "select name, age, mobile from customer ";
+        String sql = "select name, age, mobile,star from customer group by mobile order by age asc ";
         try{
             Cursor cursor = database.rawQuery(sql, null);
 
@@ -268,83 +303,93 @@ public class Fragment2 extends Fragment {
                 String name = cursor.getString(0);
                 String age = cursor.getString(1);
                 String mobile = cursor.getString(2);
+                int star =cursor.getInt(3);
 
                 Log.d(TAG,"# " + name + " : " + age + " : " + mobile);
                 printInfo("# " + name + " : " + age + " : " + mobile);
 
-                SingerItem item = new SingerItem(name,age,mobile);
-                adapter.addItem(item);
-                adapter.notifyDataSetChanged();
-
-                 i++;
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    private void dataadd(){
-        String sql1 = "insert into customer " +
-                "(name, age, mobile) values ('윤하',1,'오늘 헤어졌어요') ";
-        String sql2 = "insert into customer " +
-                "(name, age, mobile) values ('볼빨간 사춘기',2,'여행') ";
-        String sql3 = "insert into customer " +
-                "(name, age, mobile) values ('태연',3,'Rain') ";
-        String sql4 = "insert into customer " +
-                "(name, age, mobile) values ('아이유',4,'비밀의 화원') ";
-        try{
-            database.execSQL(sql1);
-            printInfo("데이터 추가 : 1");
-
-            database.execSQL(sql2);
-            printInfo("데이터 추가 : 2");
-
-            database.execSQL(sql3);
-            printInfo("데이터 추가 : 3");
-
-            database.execSQL(sql4);
-            printInfo("데이터 추가 : 4");
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    private void searchData(){
-        Log.d(TAG,"Fragment222222222222222");
-
-        String sql = "select name, age, mobile from customer where age like  '%" + editText + "%' " +
-                    " or name like '%" + editText + "%' or mobile like '%" + editText + "%' ";
-        try{
-            Cursor cursor = database.rawQuery(sql, null);
-            Log.d(TAG,"Fragment3333333333333333333333333 " + cursor);
-
-            int count = cursor.getCount();
-            printInfo("데이터 갯수 : " + count);
-
-            int i = 0;
-            while(i < count){
-                cursor.moveToNext();
-                Log.d(TAG,"Fragment444444444444444444");
-
-                String name = cursor.getString(0);
-                String age = cursor.getString(1);
-                String mobile = cursor.getString(2);
-
-                Log.d(TAG,"# " + name + " : " + age + " : " + mobile);
-                printInfo("# " + name + " : " + age + " : " + mobile);
-
-                SingerItem item = new SingerItem(name,age,mobile);
+                SingerItem item = new SingerItem(name,age,mobile,star);
                 adapter.addItem(item);
                 adapter.notifyDataSetChanged();
 
                 i++;
             }
         }catch (Exception e){
-            Log.d(TAG,"Fragment5555555555555555555555555");
-
             e.printStackTrace();
         }
     }
 
+    private void searchData(){
+
+        adapter.items.clear();
+
+        String search = editText.getText().toString();
+        Log.d(TAG,"데이터 입력 : " + search);
+
+        String sql = "select name, age, mobile,star from customer where age like  '%" + search + "%' " +
+                " or name like '%" + search + "%' or mobile like '%" + search + "%' group by mobile ";
+
+        Cursor cursor = database.rawQuery(sql, null);
+
+        int count = cursor.getCount();
+        printInfo("데이터 갯수 : " + count);
+        Log.d(TAG,"데이터 갯수 : " + count);
+
+        int i = 0;
+        while(i < count){
+            cursor.moveToNext();
+
+            String name = cursor.getString(0);
+            String age = cursor.getString(1);
+            String mobile = cursor.getString(2);
+            int star =cursor.getInt(3);
+
+            Log.d(TAG,"# " + name + " : " + age + " : " + mobile);
+            printInfo("# " + name + " : " + age + " : " + mobile);
+
+            SingerItem item = new SingerItem(name,age,mobile,star);
+            adapter.addItem(item);
+            adapter.notifyDataSetChanged();
+
+
+            i++;
+        }
+    }
+
+    public void datastar(String songname, String singer,int star){
+
+        if(star == 0) {
+            String sql = "update customer set star = 1 " +
+                    " where mobile = '" + songname + "' and name = '" + singer + "' ";
+            Toast.makeText(getActivity(),
+                    songname + " 이 즐겨찾기에 추가되었습니다.", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "즐겨찾기 디비들어감");
+            try {
+                database.execSQL(sql);
+                Log.d(TAG, "즐겨찾기 추가댐");
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.d(TAG, "즐겨찾기 예외");
+            }
+        }
+        else {
+            String sql = "update customer set star = 0 " +
+                    " where mobile = '"+songname+"' and name = '"+singer+"' ";
+            Toast.makeText(getActivity(),
+                    songname + " 이 즐겨찾기에 제거되었습니다.", Toast.LENGTH_SHORT).show();
+            Log.d(TAG,"즐겨찾기 디비들어감");
+            try {
+                database.execSQL(sql);
+                Log.d(TAG,"즐겨찾기 추가댐");
+            }catch (Exception e){
+                e.printStackTrace();
+                Log.d(TAG,"즐겨찾기 예외");
+            }
+        }
+
+    }
 
 }
+
+
+

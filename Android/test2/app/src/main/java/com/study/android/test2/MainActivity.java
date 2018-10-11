@@ -16,7 +16,6 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "lecture";
 
-
     TabLayout tabLayout;
 
     Fragment1 fragment1;
@@ -78,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
     }
-
-
 }

@@ -36,12 +36,12 @@
             android:id="@+id/tab3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="3" />
+            android:text="추가" />
 
         <android.support.design.widget.TabItem
             android:id="@+id/tab4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="4" />
+            android:text="즐겨찾기" />
     </android.support.design.widget.TabLayout>
 </LinearLayout>

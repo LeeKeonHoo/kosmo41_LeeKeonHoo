@@ -1,18 +1,22 @@
 package com.study.android.test2;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class SingerAdapter extends BaseAdapter {
 
     Context context;
     ArrayList<SingerItem> items = new ArrayList<>();
+    int[] images = {R.drawable.album1, R.drawable.album2,R.drawable.album3,R.drawable.album4,
+            R.drawable.album5,R.drawable.album6,R.drawable.album7,R.drawable.album8
+            ,R.drawable.album9,R.drawable.album10,R.drawable.album11,R.drawable.album12
+            ,R.drawable.album13,R.drawable.album14,R.drawable.album15,R.drawable.album16};
+    int[] images2 = {R.drawable.unknown};
+
 
     public SingerAdapter(Context context){
         this.context = context;
@@ -52,6 +56,16 @@ public class SingerAdapter extends BaseAdapter {
         view.setName(item.getName());
         view.setAge(item.getAge());
         view.setMobile(item.getMobile());
+        view.setStar(item.getStar());
+        int age = Integer.parseInt(item.getAge()) - 1;
+
+        if(age <= 16){
+            view.setImage(images[age]);
+        }
+        else{
+            view.setImage(images2[0]);
+        }
+
 
         return  view;
     }
