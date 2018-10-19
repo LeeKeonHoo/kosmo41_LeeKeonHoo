@@ -38,7 +38,7 @@ public class BDao {
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
-		String query = "insert into mvc_board " +
+		String query = "insert into mvc_board2 " +
 						"(bId, bName, bTitle, bContent, bHit, bGroup, bStep, bIndent, manscore, sumscore, avgscore, upload,food, sido, gigungu,gongji) " +
 						"values " + 
 						"(mvc_board_seq.nextval, ?, ?, ?, 0, mvc_board_seq.currval, 0, 0, 0, 0, 0, ?, ? ,? ,?,?)";
@@ -89,7 +89,7 @@ public class BDao {
 						  "	   select rownum num, A.* " +
 						  "	     from ( " +
 						  "	        select * " +
-						  "	          from mvc_board " +
+						  "	          from mvc_board2 " +
 						  "	         order by gongji asc,bgroup desc, bstep asc) A " +
 						  "	    where rownum <= ? ) B " +
 						  "	where B.num >= ? ";
@@ -104,7 +104,7 @@ public class BDao {
 						  "	   select rownum num, A.* " +
 						  "	     from ( " +
 						  "	        select * " +
-						  "	          from mvc_board " +
+						  "	          from mvc_board2 " +
 						  "	         order by gongji asc,bgroup desc, bstep asc) A " +
 						  "	    where rownum <= ? ) B " +
 						  "	where B.num >= ? ";
@@ -119,7 +119,7 @@ public class BDao {
 						  "	   select rownum num, A.* " +
 						  "	     from ( " +
 						  "	        select * " +
-						  "	          from mvc_board " +
+						  "	          from mvc_board2 " +
 						  "             where avgscore>0 " +
 						  "             order by gongji asc,avgscore desc, " +
 						  "	         bgroup desc, bstep asc ) A " +
@@ -137,7 +137,7 @@ public class BDao {
 						  "	   select rownum num, A.* " +
 						  "	     from ( " +
 						  "	        select * " +
-						  "	          from mvc_board " +
+						  "	          from mvc_board2 " +
 						  "             where bTitle like ? " +
 						  "	         order by gongji asc,bgroup desc, bstep asc ) A " +
 						  "	    where rownum <= ? ) B " +
@@ -155,7 +155,7 @@ public class BDao {
 						  "	   select rownum num, A.* " +
 						  "	     from ( " +
 						  "	        select * " +
-						  "	          from mvc_board " +
+						  "	          from mvc_board2 " +
 						  "             where bName like ? " +
 						  "	         order by gongji asc,bgroup desc, bstep asc ) A " +
 						  "	    where rownum <= ? ) B " +
@@ -173,7 +173,7 @@ public class BDao {
 						  "	   select rownum num, A.* " +
 						  "	     from ( " +
 						  "	        select * " +
-						  "	          from mvc_board " +
+						  "	          from mvc_board2 " +
 						  "             where food like ? " +
 						  "	         order by gongji asc,bgroup desc, bstep asc ) A " +
 						  "	    where rownum <= ? ) B " +
@@ -191,7 +191,7 @@ public class BDao {
 						  "	   select rownum num, A.* " +
 						  "	     from ( " +
 						  "	        select * " +
-						  "	          from mvc_board " +
+						  "	          from mvc_board2 " +
 						  "             where sido like ? " +
 						  "	         order by gongji asc,bgroup desc, bstep asc ) A " +
 						  "	    where rownum <= ? ) B " +
@@ -209,7 +209,7 @@ public class BDao {
 						  "	   select rownum num, A.* " +
 						  "	     from ( " +
 						  "	        select * " +
-						  "	          from mvc_board " +
+						  "	          from mvc_board2 " +
 						  "             where gigungu like ? " +
 						  "	         order by gongji asc,bgroup desc, bstep asc ) A " +
 						  "	    where rownum <= ? ) B " +
@@ -227,7 +227,7 @@ public class BDao {
 						  "	   select rownum num, A.* " +
 						  "	     from ( " +
 						  "	        select * " +
-						  "	          from mvc_board " +
+						  "	          from mvc_board2 " +
 						  "             where star like '%"+sid+"%' " +
 						  "	         order by gongji asc,bgroup desc, bstep asc ) A " +
 						  "	    where rownum <= ? ) B " +
@@ -295,44 +295,44 @@ public class BDao {
 			
 			
 			if(option ==null) {
-				String query = "select count(*) as total from mvc_board";
+				String query = "select count(*) as total from mvc_board2";
 				pstmt = con.prepareStatement(query);				
 			}
 			else if(option.equals("")) {
-				String query = "select count(*) as total from mvc_board";
+				String query = "select count(*) as total from mvc_board2";
 				pstmt = con.prepareStatement(query);				
 			}
 			else if(option.equals("0")) {
-				String query = "select count(*) as total from mvc_board where avgscore>0 ";
+				String query = "select count(*) as total from mvc_board2 where avgscore>0 ";
 				pstmt = con.prepareStatement(query);				
 			}
 			else if(option.equals("1")) {
-				String query = "select count(*) as total from mvc_board where bTitle like ?";
+				String query = "select count(*) as total from mvc_board2 where bTitle like ?";
 				pstmt = con.prepareStatement(query);
 				pstmt.setString(1, "%"+search+"%");				
 			}
 			else if(option.equals("2")) {
-				String query = "select count(*) as total from mvc_board where bName like ?";
+				String query = "select count(*) as total from mvc_board2 where bName like ?";
 				pstmt = con.prepareStatement(query);
 				pstmt.setString(1, "%"+search+"%");				
 			}
 			else if(option.equals("3")) {
-				String query = "select count(*) as total from mvc_board where food like ?";
+				String query = "select count(*) as total from mvc_board2 where food like ?";
 				pstmt = con.prepareStatement(query);
 				pstmt.setString(1, "%"+search+"%");				
 			}
 			else if(option.equals("4")) {
-				String query = "select count(*) as total from mvc_board where sido like ?";
+				String query = "select count(*) as total from mvc_board2 where sido like ?";
 				pstmt = con.prepareStatement(query);
 				pstmt.setString(1, "%"+search+"%");				
 			}
 			else if(option.equals("5")) {
-				String query = "select count(*) as total from mvc_board where gigungu like ?";
+				String query = "select count(*) as total from mvc_board2 where gigungu like ?";
 				pstmt = con.prepareStatement(query);
 				pstmt.setString(1, "%"+search+"%");				
 			}
 			else if(option.equals("6")) {
-				String query = "select count(*) as total from mvc_board where star = '"+sid+"' ";
+				String query = "select count(*) as total from mvc_board2 where star = '"+sid+"' ";
 				pstmt = con.prepareStatement(query);				
 			}
 
@@ -401,7 +401,7 @@ public class BDao {
 			String sid = (String)session.getAttribute("id");
 			String name = (String) session.getAttribute("name");
 
-			String query = "select * from mvc_board where bId =?";
+			String query = "select * from mvc_board2 where bId =?";
 			pstmt = con.prepareStatement(query);
 			pstmt.setInt(1, Integer.parseInt(strId));
 			resultSet = pstmt.executeQuery();
@@ -483,7 +483,7 @@ public class BDao {
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
-		String query = "update mvc_board " +
+		String query = "update mvc_board2 " +
 						" set bName =?, " +
 						" bTitle =?, " +
 						" bContent =?, " +
@@ -524,7 +524,7 @@ public class BDao {
 		
 		try {
 			con = dataSource.getConnection();
-			String query = "update mvc_board set bHit = bHit + 1 where bId = ?";
+			String query = "update mvc_board2 set bHit = bHit + 1 where bId = ?";
 			pstmt = con.prepareStatement(query);
 			pstmt.setString(1, bId);
 
@@ -550,7 +550,7 @@ public class BDao {
 		
 		try {
 			con = dataSource.getConnection();
-			String query = "delete mvc_board where bId = ?";
+			String query = "delete mvc_board2 where bId = ?";
 			pstmt = con.prepareStatement(query);
 			pstmt.setString(1, bId);
 
@@ -578,7 +578,7 @@ public class BDao {
 		try {
 			con = dataSource.getConnection();
 			
-			String query = "select * from mvc_board where bId =?";
+			String query = "select * from mvc_board2 where bId =?";
 			pstmt = con.prepareStatement(query);
 			pstmt.setInt(1, Integer.parseInt(str));
 			resultSet = pstmt.executeQuery();
@@ -634,7 +634,7 @@ public class BDao {
 		try {
 			con = dataSource.getConnection();
 			
-			String query = "insert into mvc_board " +
+			String query = "insert into mvc_board2 " +
 						" (bId, bName, bTitle, bContent, bGroup, bStep, bIndent) " +
 						" values (mvc_board_seq.nextval, ?, ?, ?, ?, ? ,?)";
 			pstmt = con.prepareStatement(query);
@@ -666,7 +666,7 @@ public class BDao {
 		try {
 			con = dataSource.getConnection();
 			
-			String query = "update mvc_board " +
+			String query = "update mvc_board2 " +
 						" set bStep = bStep + 1 " +
 						" where bGroup = ? and bStep > ? ";
 			pstmt = con.prepareStatement(query);
@@ -696,7 +696,7 @@ public class BDao {
 		int rn = 0;
 		if(true) {	//여기서 글-닉네임 중복 확인
 			
-		String query =  " select * from mvc_board " +
+		String query =  " select * from mvc_board2 " +
 						" where bid = '" + bId + "' and " +
 						" scoreman like '%" + sid + "%' ";
 		try {
@@ -717,7 +717,7 @@ public class BDao {
 
 		}if(rn == 0) {	//없을시 점수 주기(scoreman2에 아이디 저장)
 			
-		String query =  " update mvc_board set " +
+		String query =  " update mvc_board2 set " +
 						" avgscore = round(((sumscore+"+sumscore+")/(manscore+1)), 2), " +
 						" manscore = (manscore+1), " +
 						" sumscore = (sumscore+"+sumscore+"), " +
@@ -741,7 +741,7 @@ public class BDao {
 		
 		}if(rn == 0) {	//없을시 scoreman에 데이터 합치기
 			
-		String query2 =  " update mvc_board set " +
+		String query2 =  " update mvc_board2 set " +
 				" scoreman = (SELECT scoreman||','||scoreman2 TOTAL " +
 				" FROM mvc_board where bid = '"+bId+"') " +
 				" where bid = '"+bId+"' " ;
@@ -788,7 +788,7 @@ public class BDao {
 		int rn = 0;
 		if(true) {	//여기서 글-닉네임 중복 확인
 			
-		String query =  " select * from mvc_board " +
+		String query =  " select * from mvc_board2 " +
 						" where bid = '"+bId+"' and " +
 						" star like '%" + sid + "%' ";
 		try {
@@ -809,7 +809,7 @@ public class BDao {
 
 		}if(rn == 0) {	//없을시 점수 주기(star2에 아이디 저장)
 			
-		String query =  " update mvc_board set " +
+		String query =  " update mvc_board2 set " +
 						" star2 = '" + sid + ",' " +
 						" where bid = '"+bId+"' " ;
 		try {
@@ -830,7 +830,7 @@ public class BDao {
 		
 		}if(rn == 0) {	//없을시 star에 데이터 합치기
 			
-		String query2 =  " update mvc_board set " +
+		String query2 =  " update mvc_board2 set " +
 				" star = (SELECT star||''||star2 TOTAL " +
 				" FROM mvc_board where bid = '"+bId+"') " +
 				" where bid = '"+bId+"' " ;
@@ -876,7 +876,7 @@ public class BDao {
 		String sid = (String)session.getAttribute("id");
 		int rn = 0;
 			
-		String query =  " update mvc_board set " +
+		String query =  " update mvc_board2 set " +
 						" star = replace(star,'"+sid+",','') " +
 						" where bid = '"+bId+"' ";
 		try {
