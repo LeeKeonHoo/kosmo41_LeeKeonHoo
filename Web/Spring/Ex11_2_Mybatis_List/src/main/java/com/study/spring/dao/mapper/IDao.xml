@@ -15,8 +15,6 @@
 		DELETE FROM BOARD WHERE MID = #{param1}
 	</insert>
 
-	<insert id="modifyDao">
-		UPDATE BOARD SET MWRITER =#{param1}, MCONTENT =#{param2} WHERE MID=#{param3}
-	</insert>
 
+	
 </mapper>

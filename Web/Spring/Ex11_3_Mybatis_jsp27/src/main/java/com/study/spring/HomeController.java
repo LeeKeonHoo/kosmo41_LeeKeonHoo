@@ -55,28 +55,33 @@ public class HomeController {
 		return "/list";
 	}
 	
-	@RequestMapping("/writeForm")
-	public String writeForm() {
+	@RequestMapping("/write_view")
+	public String write_view() {
 	
-		return "/writeForm";
+		return "/write_view";
 	}	
 	
 	@RequestMapping("/write")
 	public String write(HttpServletRequest request, Model model) {
 		IDao dao = sqlSession.getMapper(IDao.class);
-		dao.writeDao(request.getParameter("mWriter"),request.getParameter("mContent"));
+		dao.writeDao(request.getParameter("bName"),request.getParameter("bTitle"),request.getParameter("bContent"));
 		return "redirect:list";
 	}
 	
-	@RequestMapping("/view")
-	public String view() {
-		return "/view";
+	@RequestMapping("/content_view")
+	public String content_view(HttpServletRequest request, Model model) {
+		System.out.println(request.getParameter("bId"));
+		IDao dao = sqlSession.getMapper(IDao.class);
+		System.out.println("1111");
+		dao.viewDao2(request.getParameter("bId"));	
+		System.out.println("2222");
+		return "/content_view";
 	}
 	
 	@RequestMapping("/delete")
 	public String delete(HttpServletRequest request, Model model) {
 		IDao dao = sqlSession.getMapper(IDao.class);
-		dao.deleteDao(request.getParameter("mId"));
+		dao.deleteDao(request.getParameter("bId"));
 		return "redirect:list";
 	}
 	

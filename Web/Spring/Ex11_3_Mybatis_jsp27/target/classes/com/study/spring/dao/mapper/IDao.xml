@@ -4,17 +4,20 @@
 				
 <mapper namespace="com.study.spring.dao.IDao">
 	<select id="listDao" resultType="com.study.spring.dto.ContentDto">
-			SELECT * FROM BOARD ORDER BY MID DESC
+			SELECT * FROM MVC_BOARD ORDER BY BID DESC
 	</select>
 	
 	<insert id="writeDao">
-		INSERT INTO BOARD(MID,MWRITER,MCONTENT) VALUES(BOARD_SEQ.NEXTVAL, #{param1},#{param2})
+		INSERT INTO MVC_BOARD(BID,BNAME,BTITLE,BCONTENT,BHIT,BGROUP,BSTEP,BINDENT) VALUES(MVC_BOARD_SEQ.NEXTVAL, #{param1},#{param2},#{param3},0,MVC_BOARD_SEQ.CURRVAL,0,0)
 	</insert>
 
 	<insert id="deleteDao">
-		DELETE FROM BOARD WHERE MID = #{param1}
+		DELETE FROM MVC_BOARD WHERE BID = #{param1}
 	</insert>
 
+	<insert id="viewDao2">
+		SELECT * FROM MVC_BOARD WHERE BID = #{param1}
+	</insert>
 
 	
 </mapper>

@@ -13,7 +13,6 @@
 		<td>번호</td>
 		<td>작성자</td>
 		<td>내용</td>
-		<td>수정</td>
 		<td>삭제</td>
 	<tr>
 	<c:forEach items="${list }" var="dto">
@@ -21,7 +20,6 @@
 		<td>${dto.mId }</td>
 		<td>${dto.mWriter }</td>
 		<td>${dto.mContent }</td>
-		<td><a href="modifyForm">수정</a></td>		
 		<td><a href="delete?mId=${dto.mId }">X</a></td>
 	<tr>
 	</c:forEach>
