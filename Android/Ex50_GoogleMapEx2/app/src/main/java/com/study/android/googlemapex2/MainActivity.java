@@ -123,6 +123,8 @@ public class MainActivity extends AppCompatActivity {
         LatLng curPoint = new LatLng(location.getLatitude(),location.getLongitude());
 
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(curPoint,15));
+
+        showMyLocationMarker(location);
     }
 
     private void showMyLocationMarker(Location location){
@@ -147,12 +149,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onResume(){
-        super.onResume();
-
-        if(map != null){
-            map.setMyLocationEnabled(true);
-        }
-    }
 }
