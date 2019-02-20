@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper">
+
+	<resultMap type="map" id="boardMap">
+		<result column="NAME" property="name" />
+		<result column="ID" property="id" />
+		<result column="PASSWORD" property="password" />
+		<result column="ADMIN" property="admin" />
+	</resultMap>
+	
+	<resultMap type="map" id="listMap">
+		<result column="SEQ" property="seq" />
+		<result column="NAME" property="name" />
+		<result column="TITLE" property="title" />
+		<result column="CONTENT" property="content" />
+		<result column="REG_DATE" property="regDate" />
+		<result column="UPT_DATE" property="uptDate" />
+		<result column="ADMIN_NAME" property="adminName" />
+		<result column="EVENT" property="event" />
+	</resultMap>
+
+	<select id="loginChk" parameterType="Map" resultMap="boardMap">
+		SELECT
+			NAME,
+			ID,
+			PASSWORD,
+			decode (ADMIN,'1','사원','2','대리','3','과장','4','부장') as admin
+			FROM LKH_MEMBER
+			WHERE ID = #{id} 
+	</select >
+	
+	<select id="popuplist" parameterType="Integer" resultMap="boardMap">
+		SELECT
+			NAME
+		FROM LKH_MEMBER
+		WHERE 1=1
+		and admin <![CDATA[<]]> #{kwanhan}
+		and name not in (select name from LKH_DAERI)
+		ORDER BY ADMIN DESC
+	</select>
+	
+	<select id="popupajax" parameterType="Map" resultMap="boardMap">
+		SELECT
+			decode (ADMIN,'1','사원','2','대리','3','과장','4','부장') as admin
+		FROM LKH_MEMBER
+		WHERE NAME = #{option}
+	</select>
+	
+	<insert id="popupok">
+		INSERT INTO LKH_DAERI
+		(
+			NAME,
+			ADMIN,
+			ADMINNAME,
+			REGDATE
+		)
+		VALUES
+		(
+			#{option}, 
+			#{class}, 
+			#{name}, 
+			(SELECT SYSDATE FROM DUAL)
+		)
+	</insert>
+	
+	<select id="kwanhan" parameterType="map" resultType="map">
+		SELECT
+			ADMIN,
+			ADMINNAME,
+			REGDATE
+		FROM LKH_DAERI
+		WHERE NAME = #{sessionName}
+	</select>
+	
+	<sql id="viewlist">
+		select 
+			SEQ,
+			NAME, 
+			TITLE, 
+			CONTENT, 
+			REG_DATE, 
+			UPT_DATE, 
+			ADMIN_NAME, 
+			decode (EVENT,'1','임시저장','2','결제대기','3','결제중','4','결제완료','5','반려') as event 
+		from LKH_MAINLIST
+		where 1=1
+	</sql>
+
+	<select id="list" parameterType="Map" resultMap="listMap">
+		<include refid="viewlist"></include>
+		<if test="search != null">
+			<choose>
+				<when test="option == 1">
+					and NAME like '%' || #{search} || '%'
+				</when>
+				<when test="option == 2">
+					and TITLE like '%' || #{search} || '%'
+				</when>
+				<when test="option == 3">
+					and ADMIN_NAME like '%' || #{search} || '%'
+				</when>
+			</choose>
+			<if test="startdate != null and startdate != '' and enddate != null and enddate != ''">
+				and to_char(reg_date,'yyyy-mm-dd') between #{startdate} and #{enddate}
+			</if>
+		</if>
+		<choose>
+			<when test="ADMINNAME != null">
+				and NAME = #{ADMINNAME}
+				or seq in (SELECT seq FROM LKH_HISTORY
+							WHERE ADMIN_NAME = #{sessionName})
+				or NAME = #{sessionName}
+				<if test="ADMIN == '과장'">
+				or event = '2'
+				</if>
+				<if test="ADMIN == '부장'">
+				or event = '3'
+				</if>
+			</when>
+			<otherwise>
+				and NAME = #{sessionName}
+				or seq in (SELECT seq FROM LKH_HISTORY
+							WHERE ADMIN_NAME = #{sessionName})
+				<if test="sessionAdmin == '과장'">
+				or event = '2'
+				</if>
+				<if test="sessionAdmin == '부장'">
+				or event = '3'
+				</if>
+			</otherwise>
+		</choose>
+		ORDER BY SEQ DESC
+	</select>
+
+	<select id="searchAjax" parameterType="Map" resultMap="listMap">
+		<include refid="viewlist"></include>
+		and NAME = #{sessionName}
+			<if test="status != 0">		
+			and event = #{status}
+			</if>
+			<if test="(sessionAdmin == '과장' and status==2) or status==0">
+			or event='2'
+			</if>
+			<if test="(sessionAdmin == '부장' and status==3) or status==0">
+			or event='3'
+			</if>
+		ORDER BY SEQ DESC
+	</select>
+	
+	<select id="content" parameterType="int" resultMap="listMap">
+		<include refid="viewlist"></include>
+		and seq = #{seq}
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO LKH_MAINLIST
+		(
+			SEQ,
+			NAME, 
+			TITLE, 
+			CONTENT, 
+			REG_DATE, 
+			EVENT 
+		)
+		VALUES
+		(
+			#{seq},
+			#{name}, 
+			#{title}, 
+			#{content}, 
+			(SELECT SYSDATE FROM DUAL), 
+			#{postevent}
+		)
+	</insert>
+
+	<select id="writeview" parameterType="String" resultMap="listMap">
+		select 
+			nvl(max(seq),0)+1 as seq
+		from LKH_MAINLIST
+	</select>
+	
+	<update id="update">
+		update LKH_MAINLIST
+			set event = #{postevent}
+			<if test="postevent == 3 or postevent == 4 or postevent == 5">
+				,UPT_DATE = (SELECT SYSDATE FROM DUAL)
+				,ADMIN_NAME = #{adminname} 
+			</if>
+		where seq = #{seq}
+	</update>
+
+	<insert id="history">
+		INSERT INTO LKH_HISTORY
+		(
+			SEQ,
+			UPT_DATE, 
+			ADMIN_NAME,
+			EVENT,
+			HISEQ
+		)
+		VALUES
+		(
+			#{seq},
+			(SELECT SYSDATE FROM DUAL), 
+			#{adminname},
+			#{postevent},
+			(select  DISTINCT(nvl((select count(*) from LKH_HISTORY where seq= #{seq}),0)+1)
+			from LKH_HISTORY)
+		)
+	</insert>
+
+	<select id="historyContent" parameterType="int" resultMap="listMap">
+		select 
+			SEQ,
+			UPT_DATE, 
+			ADMIN_NAME,
+			decode(EVENT,'1','임시저장','2','결제대기','3','결제중','4','결제완료','5','반려') as event,
+			HISEQ
+		from LKH_HISTORY
+		where seq = #{seq}
+	</select>
+
+
+	<update id="lmsiupdate">
+		update LKH_MAINLIST
+			set title = #{title}
+			, content = #{content}
+			, reg_date = (SELECT SYSDATE FROM DUAL)
+		where seq = #{seq}
+	</update>
+
+</mapper>
+
