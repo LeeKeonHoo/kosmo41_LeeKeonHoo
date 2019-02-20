@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="543" Id="form" Left="8" PidAttrib="7" Title="New&#32;Form" Top="8" Ver="1.0" Width="800" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="Dataset1">
+				<Contents>
+					<colinfo id="column0" size="256" summ="default" type="STRING"/>
+					<colinfo id="column1" size="256" summ="default" type="STRING"/>
+					<record>
+						<column0>1</column0>
+						<column1>010</column1>
+					</record>
+					<record>
+						<column0>2</column0>
+						<column1>011</column1>
+					</record>
+					<record>
+						<column0>3</column0>
+						<column1>012</column1>
+					</record>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="Dataset0">
+				<Contents>
+					<colinfo id="seq" size="256" summ="default" type="STRING"/>
+					<colinfo id="name" size="256" summ="default" type="STRING"/>
+					<colinfo id="gender" size="256" summ="default" type="STRING"/>
+					<colinfo id="phone" size="256" summ="default" type="STRING"/>
+					<colinfo id="class" size="256" summ="default" type="STRING"/>
+					<colinfo id="bonus" size="256" summ="default" type="STRING"/>
+					<colinfo id="sal" size="256" summ="default" type="INT"/>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Button Height="46" Id="Button0" Left="480" OnClick="Button0_OnClick" TabOrder="1" Text="등록" Top="32" Width="94"></Button>
+		<Button Height="45" Id="Button1" Left="592" TabOrder="2" Text="삭제" Top="32" Width="89"></Button>
+		<Static Font="Tahoma,16,Bold" Height="32" Id="Static0" Left="72" TabOrder="3" Text="사원관리" Top="40" Width="120"></Static>
+		<Static Font="Tahoma,12,Bold" Height="32" Id="Static1" Left="48" TabOrder="4" Text="사번" Top="96" Width="64"></Static>
+		<Edit Height="37" Id="seq" Left="96" OnChanged="seq_OnChanged" TabOrder="5" Top="88" Width="182"></Edit>
+		<Static Font="Tahoma,12,Bold" Height="32" Id="Static2" Left="368" TabOrder="6" Text="이름" Top="104" Width="64"></Static>
+		<Edit Height="37" Id="name" Left="424" OnChanged="Edit1_OnChanged" TabOrder="7" Top="96" Width="182"></Edit>
+		<Static Font="Tahoma,12,Bold" Height="32" Id="Static3" Left="360" TabOrder="8" Text="연락처" Top="160" Width="64"></Static>
+		<Edit Height="37" Id="phone3" Left="648" OnChanged="Edit2_OnChanged" TabOrder="9" Top="152" Width="78"></Edit>
+		<Edit Height="37" Id="phone2" Left="552" TabOrder="10" Top="152" Width="78"></Edit>
+		<Radio ColumnCount="2" Height="48" Id="gender" INDEX="-1" Left="88" TabOrder="11" Top="152" Width="96">
+			<Contents>
+				<Layout code="1" height="13" left="0" text="남" top="0" width="100"/>
+				<Layout code="2" height="60" left="0" text="여" top="0" width="100"/>
+			</Contents>
+		</Radio>
+		<Static Font="Tahoma,12,Bold" Height="32" Id="Static4" Left="32" TabOrder="12" Text="성별" Top="168" Width="64"></Static>
+		<Combo BindDataset="Dataset1" CodeColumn="column1" DataColumn="column1" DisplayRowCnt="5" Height="33" Id="phone1" INDEX="0" InnerDataset="Dataset1" Left="448" TabOrder="13" Top="160" Width="83">
+			<Contents></Contents>
+		</Combo>
+		<Checkbox Height="31" Id="check1" Left="88" OnClick="check1_OnClick" TabOrder="14" Text="S" Top="224" Value="FALSE" Width="31"></Checkbox>
+		<Checkbox Height="31" Id="check2" Left="128" OnClick="check2_OnClick" TabOrder="15" Text="A" Top="224" Value="FALSE" Width="31"></Checkbox>
+		<Checkbox Height="31" Id="check3" Left="176" OnClick="check3_OnClick" TabOrder="16" Text="B" Top="224" Value="FALSE" Width="31"></Checkbox>
+		<Checkbox Height="31" Id="check4" Left="224" OnClick="check4_OnClick" TabOrder="17" Text="F" Top="224" Value="FALSE" Width="31"></Checkbox>
+		<Static Font="Tahoma,12,Bold" Height="32" Id="Static5" Left="352" TabOrder="18" Text="기본급" Top="216" Width="64"></Static>
+		<Edit Height="37" Id="sal" Left="432" TabOrder="19" Top="216" Width="182"></Edit>
+		<Grid BindDataset="Dataset0" BkColor2="default" BoldHead="true" Bottom="446" Enable="true" EndLineColor="default" Height="174" Id="Grid0" InputPanel="FALSE" Left="48" LineColor="default" Right="706" TabOrder="20" TabStop="true" Top="272" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="default" WheelScrollRow="1" Width="658">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="80"/>
+					</columns>
+					<head>
+						<cell col="0" display="text" text="사번"/>
+						<cell col="1" display="text" text="이름"/>
+						<cell col="2" display="text" text="성별"/>
+						<cell col="3" display="text" text="번호"/>
+						<cell col="4" display="text" text="보너스"/>
+						<cell col="5" display="text" text="보너스"/>
+						<cell col="6" display="text" text="급여"/>
+					</head>
+					<body>
+						<cell col="0" colid="seq" display="text"/>
+						<cell col="1" colid="name" display="text"/>
+						<cell col="2" colid="gender" display="text"/>
+						<cell col="3" colid="phone" display="text"/>
+						<cell col="4" colid="class" display="text"/>
+						<cell col="5" colid="bonus" display="text"/>
+						<cell col="6" colid="sal" display="number"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+		<Static Font="Tahoma,12,Bold" Height="32" Id="Static6" Left="32" TabOrder="21" Text="실적" Top="232" Width="64"></Static>
+	</Form>
+	<Script><![CDATA[
+function Button0_OnClick(obj)
+{
+	var seq = seq.Text;
+	var name = name.Text;
+	var phone = phone1.Text + phone2.Text + phone3.Text;
+	var sal = sal.Text;
+	var gender = gender.Text;
+	var checkbox;
+	var bonus = 0;
+
+	if(check1 == true){
+		checkbox ="S";
+		bonus = Tonumber(sal) * 2;
+	}else if(check2 == true){
+		checkbox ="A";	
+		bonus = Tonumber(sal) * 1.8;
+	}else if(check3 == true){
+		checkbox ="B";
+		bonus = Tonumber(sal) * 1.6;
+	}else if(check4 == true){
+		checkbox ="F";	
+		bonus = 0;
+	}
+	
+	
+	
+	var upload = Dataset0.AppendRow();
+	Dataset0.SetColumn(upload,"seq",seq);
+	Dataset0.SetColumn(upload,"name",name);
+	Dataset0.SetColumn(upload,"phone",phone);
+	Dataset0.SetColumn(upload,"sal",sal);
+	Dataset0.SetColumn(upload,"gender",gender);
+	Dataset0.SetColumn(upload,"class",checkbox);
+	Dataset0.SetColumn(upload,"bonus",bonus);
+	
+
+}
+
+function check1_OnClick(obj,strValue)
+{
+	if(check1.Value == true){
+		check2.Value = false;
+		check3.Value = false;
+		check4.Value = false;
+	}
+}
+
+function check2_OnClick(obj,strValue)
+{
+		if(check2.Value == true){
+		check1.Value = false;
+		check3.Value = false;
+		check4.Value = false;
+		}
+}
+
+function check3_OnClick(obj,strValue)
+{
+		if(check3.Value == true){
+		check1.Value = false;
+		check2.Value = false;
+		check4.Value = false;
+		}
+}
+
+function check4_OnClick(obj,strValue)
+{
+		if(check4.Value == true){
+		check1.Value = false;
+		check2.Value = false;
+		check3.Value = false;
+		}
+}
+
+function seq_OnChanged(obj,strText)
+{
+	
+}
+]]></Script>
+</Window>

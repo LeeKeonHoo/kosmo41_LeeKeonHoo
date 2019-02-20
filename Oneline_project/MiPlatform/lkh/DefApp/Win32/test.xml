@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+	<Form Height="543" Id="form" Left="8" PidAttrib="7" Title="New&#32;Form" Top="8" Ver="1.0" Width="800" WorkArea="true">
+		<Datasets>
+			<Dataset DataSetType="Dataset" Id="ds_sawon">
+				<Contents>
+					<colinfo id="SEQ" size="256" summ="default" type="STRING"/>
+					<colinfo id="MEM_NAME" size="256" summ="default" type="STRING"/>
+					<colinfo id="MEM_ID" size="256" summ="default" type="STRING"/>
+					<colinfo id="BOARD_SUBJECT" size="256" summ="default" type="STRING"/>
+					<colinfo id="BOARD_CONTENT" size="256" summ="default" type="STRING"/>
+					<colinfo id="REG_DATE" size="256" summ="default" type="STRING"/>
+					<colinfo id="UPT_DATE" size="256" summ="default" type="STRING"/>
+					<colinfo id="VIEW_CNT" size="256" summ="default" type="STRING"/>
+				</Contents>
+			</Dataset>
+			<Dataset DataSetType="Dataset" Id="check">
+				<Contents>
+					<colinfo id="column0" size="256" summ="default" type="STRING"/>
+					<colinfo id="column1" size="256" summ="default" type="STRING"/>
+					<record>
+						<column0>전체</column0>
+						<column1>1</column1>
+					</record>
+					<record>
+						<column0>작성자</column0>
+						<column1>2</column1>
+					</record>
+					<record>
+						<column0>제목</column0>
+						<column1>3</column1>
+					</record>
+				</Contents>
+			</Dataset>
+		</Datasets>
+		<Button Height="47" Id="Button0" Left="672" OnClick="Button0_OnClick" TabOrder="1" Text="조회" Top="32" Width="95"></Button>
+		<Edit Height="41" Id="search" Left="536" TabOrder="2" Top="40" Width="117"></Edit>
+		<Calendar Height="47" Id="startdata" Left="72" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="3" Top="40" Width="136"></Calendar>
+		<Calendar Height="47" Id="enddata" Left="224" SaturdayTextColor="blue" SundayTextColor="red" TabOrder="4" Top="40" Width="136"></Calendar>
+		<Combo CodeColumn="column1" DataColumn="column0" Height="46" Id="option" InnerDataset="check" Left="384" TabOrder="5" Top="40" Width="137"></Combo>
+		<Grid BindDataset="ds_sawon" BoldHead="true" Bottom="311" Enable="true" EndLineColor="default" Height="190" Id="Grid0" InputPanel="FALSE" Left="78" LineColor="default" Right="765" TabOrder="6" TabStop="true" Top="121" UseDBuff="true" UsePopupMenu="true" UseSelColor="true" Visible="true" VLineColor="default" WheelScrollRow="1" Width="687">
+			<contents>
+				<format id="Default">
+					<columns>
+						<col width="80"/>
+						<col width="83"/>
+						<col width="80"/>
+						<col width="104"/>
+						<col width="95"/>
+						<col width="80"/>
+						<col width="80"/>
+						<col width="73"/>
+					</columns>
+					<head>
+						<cell col="0" display="text" text="SEQ"/>
+						<cell col="1" display="text" text="MEM_NAME"/>
+						<cell col="2" display="text" text="MEM_ID"/>
+						<cell col="3" display="text" text="BOARD_SUBJECT"/>
+						<cell col="4" display="text" text="BOARD_CONTENT"/>
+						<cell col="5" display="text" text="REG_DATE"/>
+						<cell col="6" display="text" text="UPT_DATE"/>
+						<cell col="7" display="text" text="VIEW_CNT"/>
+					</head>
+					<body>
+						<cell col="0" colid="SEQ" display="text"/>
+						<cell col="1" colid="MEM_NAME" display="text"/>
+						<cell col="2" colid="MEM_ID" display="text"/>
+						<cell col="3" colid="BOARD_SUBJECT" display="text"/>
+						<cell col="4" colid="BOARD_CONTENT" display="text"/>
+						<cell col="5" colid="REG_DATE" display="text"/>
+						<cell col="6" colid="UPT_DATE" display="text"/>
+						<cell col="7" colid="VIEW_CNT" display="text"/>
+					</body>
+				</format>
+			</contents>
+		</Grid>
+	</Form>
+	<Script><![CDATA[
+function Button0_OnClick(obj)
+{
+	var search = search.Text;
+	var startdata = startdata.Text;
+	var enddata = enddata.Text;
+	var option = option.Value;
+	if(search = ''){
+		search = 'null';
+	}
+	
+	
+	
+	var param = "search="+search + " startdata="+startdata + " enddata="+enddata + " option="+option;
+	alert(param);
+//	ds_sawon.Load("http://192.168.0.10:8080/spring/hellolist");
+	
+	Transaction("tr", "http://192.168.0.10:8080/spring/hellolist", "", "ds_sawon=javalist",param, "callback");
+}
+
+
+function callback(){
+//	alert("성공");
+}]]></Script>
+</Window>
